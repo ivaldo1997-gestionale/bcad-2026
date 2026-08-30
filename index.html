@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B-CAD 2026 — Raccolta Contatti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── Token di design B-CAD 2026 ──────────────────────────────── */
+:root{
+  --navy:#09203B;--teal:#4AB8B0;--teal-dk:#389890;--teal-lt:rgba(74,184,176,.12);
+  --cream:#E6DABE;--cream-dim:#d5ccaa;
+  --bg:#eee8d5;--surface:#fff;--border:#ccc3a8;
+  --text:#09203B;--muted:#5a6a79;
+  --field:#faf8f1;--field-b:#c8bfa0;
+  --ok:#287a56;--err:#b53030;
+  --c-v:#cc2222;--c-h:#38a8cc;--c-s:#c9940e;
+  --c-e:#1a5fa8;--c-t:#7a5830;--c-i:#2c7a3c;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1e30;--surface:#16293d;--border:#2a3f55;
+    --text:#e6dabe;--muted:#8aa8c0;
+    --field:#1a2e42;--field-b:#2a3f55;
+    --cream:#1e2e3e;--cream-dim:#253545;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1e30;--surface:#16293d;--border:#2a3f55;
+  --text:#e6dabe;--muted:#8aa8c0;
+  --field:#1a2e42;--field-b:#2a3f55;
+  --cream:#1e2e3e;--cream-dim:#253545;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:'Carlito',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ── Header ─────────────────────────────────────────────────── */
+header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.h-left{display:flex;align-items:baseline;gap:10px}
+.h-main{font-family:'Caladea',Georgia,serif;font-size:1.25rem;color:var(--teal);letter-spacing:.02em}
+.h-sub{font-size:.7rem;color:#8aa8c0;letter-spacing:.06em;text-transform:uppercase}
+.btn-admin{background:none;border:1.5px solid rgba(74,184,176,.5);border-radius:7px;padding:6px 13px;color:var(--teal);font-family:'Caladea',Georgia,serif;font-size:.85rem;cursor:pointer;transition:background .15s}
+.btn-admin:hover{background:rgba(74,184,176,.12)}
+
+/* ── Schermata PIN ────────────────────────────────────────────── */
+#view-pin{display:none;position:fixed;inset:0;background:var(--navy);z-index:100;display:none;align-items:center;justify-content:center}
+#view-pin.open{display:flex}
+.pin-box{background:var(--surface);border-radius:14px;padding:32px 28px;width:min(380px,90vw);text-align:center}
+.pin-box h2{font-family:'Caladea',Georgia,serif;font-size:1.4rem;color:var(--navy);margin-bottom:6px}
+.pin-box p{color:var(--muted);font-size:.88rem;margin-bottom:20px}
+#pin-input{width:100%;background:var(--field);border:1.5px solid var(--teal);border-radius:8px;padding:12px;text-align:center;font-size:1.6rem;letter-spacing:.3em;color:var(--text);outline:none;margin-bottom:12px;font-family:'Carlito',Arial,sans-serif}
+.pin-err{color:var(--err);font-size:.82rem;margin-bottom:10px;min-height:1.2em}
+.pin-actions{display:flex;flex-direction:column;gap:8px}
+.btn-teal{background:var(--teal);color:#fff;border:none;border-radius:9px;padding:12px 20px;font-family:'Caladea',Georgia,serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-teal:hover{background:var(--teal-dk)}
+.btn-ghost{background:none;border:none;color:var(--muted);font-size:.85rem;cursor:pointer;padding:4px}
+
+/* ── Layout form ─────────────────────────────────────────────── */
+#view-form{display:block}
+main{max-width:620px;margin:0 auto;padding:24px 16px 100px}
+.lbl{font-family:'Caladea',Georgia,serif;font-size:.73rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px}
+
+/* ── Espositori ──────────────────────────────────────────────── */
+.esp-wrap{margin-bottom:24px}
+.esp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+@media(min-width:430px){.esp-grid{grid-template-columns:repeat(3,1fr)}}
+.esp-card{background:var(--surface);border:2px solid var(--border);border-radius:10px;padding:12px 12px 12px 15px;cursor:pointer;display:flex;flex-direction:column;gap:3px;position:relative;overflow:hidden;user-select:none;transition:border-color .15s,background .15s;-webkit-tap-highlight-color:transparent}
+.esp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--bc,var(--border))}
+.esp-card.sel{border-color:var(--teal);background:var(--teal-lt)}
+.ck{position:absolute;top:7px;right:7px;width:17px;height:17px;border-radius:50%;background:var(--teal);display:none;align-items:center;justify-content:center}
+.esp-card.sel .ck{display:flex}
+.ck svg{width:9px;height:9px}
+.en{font-family:'Caladea',Georgia,serif;font-size:.9rem;font-weight:700;line-height:1.2}
+.ed{font-size:.68rem;color:var(--muted);line-height:1.3}
+.ferr{color:var(--err);font-size:.78rem;margin-top:5px;display:none}
+
+/* ── Card + campi ────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:360px){.row2{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:3px}
+.field label{font-size:.73rem;font-weight:700;color:var(--muted)}
+.req{color:var(--teal-dk)}
+.field input,.field textarea{background:var(--field);border:1.5px solid var(--field-b);border-radius:6px;padding:9px 12px;font-family:'Carlito',Arial,sans-serif;font-size:.95rem;color:var(--text);width:100%;outline:none;transition:border-color .15s}
+.field input:focus,.field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-lt)}
+.field textarea{resize:vertical;min-height:65px}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted);opacity:.5}
+
+/* ── GDPR ────────────────────────────────────────────────────── */
+.gdpr-block{background:color-mix(in srgb,var(--cream) 60%,var(--surface));border:1.5px solid var(--cream-dim);border-radius:10px;padding:15px 17px;margin-bottom:16px}
+.gdpr-info{font-size:.76rem;color:var(--muted);line-height:1.55;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--cream-dim)}
+.gdpr-info strong{color:var(--text)}
+.gdpr-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
+.gdpr-row:last-of-type{margin-bottom:0}
+.gdpr-row input[type=checkbox]{width:19px;height:19px;accent-color:var(--teal);flex-shrink:0;margin-top:1px;cursor:pointer}
+.gdpr-row label{font-size:.8rem;color:var(--text);line-height:1.45;cursor:pointer}
+.gdpr-row label em{font-style:normal;color:var(--muted);font-size:.73rem}
+.perr{color:var(--err);font-size:.74rem;margin-top:3px;display:none}
+
+/* ── Firma ───────────────────────────────────────────────────── */
+.firma-section{margin-bottom:16px}
+.firma-canvas-box{background:#fff;border:1.5px solid var(--teal);border-radius:10px;overflow:hidden;touch-action:none;cursor:crosshair}
+.firma-canvas-box canvas{display:block;width:100%;height:150px}
+.firma-bar{display:flex;justify-content:space-between;align-items:center;margin-top:5px}
+.firma-hint{font-size:.7rem;color:var(--muted)}
+.btn-clear{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:.76rem;color:var(--muted);cursor:pointer}
+
+/* ── Submit sticky ────────────────────────────────────────────── */
+.submit-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);padding:12px 16px;z-index:20;box-shadow:0 -2px 12px rgba(9,32,59,.1)}
+.btn-submit{background:var(--teal);color:#fff;border:none;border-radius:9px;padding:14px 24px;font-family:'Caladea',Georgia,serif;font-size:1.05rem;font-weight:700;cursor:pointer;width:100%;transition:background .15s;box-shadow:0 2px 8px rgba(74,184,176,.3)}
+.btn-submit:hover:not(:disabled){background:var(--teal-dk)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.alert-err{display:none;background:color-mix(in srgb,var(--err) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--err) 25%,transparent);border-radius:9px;padding:12px 14px;color:var(--err);font-size:.84rem;margin-bottom:12px}
+
+/* ── Successo form ─────────────────────────────────────────────── */
+#view-success{display:none;text-align:center;padding:70px 24px}
+#view-success .ico{font-size:3.5rem;margin-bottom:14px}
+#view-success h2{font-family:'Caladea',Georgia,serif;font-size:1.5rem;color:var(--ok);margin-bottom:8px}
+#view-success p{color:var(--muted);font-size:.92rem;line-height:1.5}
+#view-success .btn-new{margin-top:24px;display:inline-block;background:var(--teal);color:#fff;border:none;border-radius:9px;padding:11px 24px;font-family:'Caladea',Georgia,serif;font-size:.95rem;cursor:pointer}
+
+/* ── Pannello Admin ───────────────────────────────────────────── */
+#view-admin{display:none;max-width:960px;margin:0 auto;padding:24px 16px 60px}
+.admin-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.admin-title{font-family:'Caladea',Georgia,serif;font-size:1.4rem;color:var(--text)}
+.admin-title span{color:var(--teal);font-size:1rem;margin-left:6px}
+.admin-actions{display:flex;gap:8px}
+.btn-exp{border:none;border-radius:7px;padding:8px 14px;font-family:'Caladea',Georgia,serif;font-size:.85rem;cursor:pointer;transition:background .15s}
+.btn-exp-filt{background:var(--teal);color:#fff}
+.btn-exp-filt:hover{background:var(--teal-dk)}
+.btn-exp-all{background:var(--navy);color:#fff}
+.btn-exp-all:hover{background:#0f2d4a}
+.btn-back{background:none;border:1px solid var(--border);border-radius:7px;padding:7px 13px;color:var(--muted);font-size:.83rem;cursor:pointer}
+
+/* Counter chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.78rem;color:var(--muted);white-space:nowrap}
+.chip strong{color:var(--teal)}
+
+/* Filtri */
+.filters{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.filters label{font-size:.75rem;font-weight:700;color:var(--muted)}
+.filters select{background:var(--field);border:1.5px solid var(--field-b);border-radius:6px;padding:6px 10px;font-size:.85rem;color:var(--text);outline:none;cursor:pointer}
+.filters select:focus{border-color:var(--teal)}
+
+/* Tabella */
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.83rem}
+thead tr{background:var(--navy);color:#fff}
+thead th{padding:10px 12px;text-align:left;font-family:'Caladea',Georgia,serif;font-weight:700;font-size:.78rem;letter-spacing:.04em;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--teal-lt)}
+tbody td{padding:9px 12px;vertical-align:top;color:var(--text)}
+.td-nome{font-weight:700;white-space:nowrap}
+.td-ruolo{font-size:.75rem;color:var(--muted)}
+.td-esp{display:flex;flex-wrap:wrap;gap:4px}
+.esp-tag{padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:700;color:#fff;white-space:nowrap}
+.tag-Vaillant{background:var(--c-v)}
+.tag-Helty{background:var(--c-h)}
+.tag-Sunerg{background:var(--c-s)}
+.tag-Eurotherm{background:var(--c-e)}
+.tag-Thermofloc{background:var(--c-t)}
+.tag-Internorm{background:var(--c-i)}
+.td-fonte{font-size:.73rem;color:var(--muted);white-space:nowrap}
+.td-firmato{color:var(--ok);font-size:.85rem}
+.empty-row td{text-align:center;padding:32px;color:var(--muted);font-style:italic}
+.loading{text-align:center;padding:40px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────────── -->
+<header>
+  <div class="h-left">
+    <span class="h-main">B-CAD 2026</span>
+    <span class="h-sub">Raccolta Contatti</span>
+  </div>
+  <button class="btn-admin" id="btn-open-admin" onclick="openPin()">Pannello ITA</button>
+</header>
+
+<!-- ── OVERLAY PIN ─────────────────────────────────────────────── -->
+<div id="view-pin">
+  <div class="pin-box">
+    <h2>Pannello ITA</h2>
+    <p>Inserisci il codice di accesso</p>
+    <input type="password" id="pin-input" placeholder="••••" maxlength="6" inputmode="numeric">
+    <div class="pin-err" id="pin-err"></div>
+    <div class="pin-actions">
+      <button class="btn-teal" onclick="doPin()">Accedi</button>
+      <button class="btn-ghost" onclick="closePin()">← Torna al form</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── VIEW FORM ───────────────────────────────────────────────── -->
+<div id="view-form">
+  <main>
+    <div class="alert-err" id="form-err"></div>
+
+    <!-- Espositori -->
+    <div class="esp-wrap">
+      <span class="lbl">Interesse per (seleziona uno o più)</span>
+      <div class="esp-grid" id="esp-grid">
+        <div class="esp-card" data-n="Vaillant"   style="--bc:var(--c-v)" tabindex="0" role="checkbox" aria-checked="false"><div class="ck"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="en">Vaillant</span><span class="ed">Impianti termici e pompe di calore</span></div>
+        <div class="esp-card" data-n="Helty"      style="--bc:var(--c-h)" tabindex="0" role="checkbox" aria-checked="false"><div class="ck"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="en">Helty</span><span class="ed">Ventilazione Meccanica Controllata</span></div>
+        <div class="esp-card" data-n="Sunerg"     style="--bc:var(--c-s)" tabindex="0" role="checkbox" aria-checked="false"><div class="ck"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="en">Sunerg</span><span class="ed">Fotovoltaico made in Italy</span></div>
+        <div class="esp-card" data-n="Eurotherm"  style="--bc:var(--c-e)" tabindex="0" role="checkbox" aria-checked="false"><div class="ck"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="en">Eurotherm</span><span class="ed">Sistemi radianti e regolazione</span></div>
+        <div class="esp-card" data-n="Thermofloc" style="--bc:var(--c-t)" tabindex="0" role="checkbox" aria-checked="false"><div class="ck"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="en">Thermofloc</span><span class="ed">Isolamento a insufflaggio in cellulosa</span></div>
+        <div class="esp-card" data-n="Internorm"  style="--bc:var(--c-i)" tabindex="0" role="checkbox" aria-checked="false"><div class="ck"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="en">Internorm</span><span class="ed">Serramenti ad alte prestazioni</span></div>
+      </div>
+      <div class="ferr" id="esp-err">Seleziona almeno un espositore</div>
+    </div>
+
+    <!-- Dati di contatto -->
+    <div class="card">
+      <span class="lbl">Dati di contatto</span>
+      <div class="row2">
+        <div class="field"><label for="f-nome">Nome <span class="req">*</span></label><input id="f-nome" type="text" placeholder="Mario" autocomplete="given-name"></div>
+        <div class="field"><label for="f-cognome">Cognome <span class="req">*</span></label><input id="f-cognome" type="text" placeholder="Rossi" autocomplete="family-name"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="f-azienda">Azienda <span class="req">*</span></label><input id="f-azienda" type="text" placeholder="Studio Rossi" autocomplete="organization"></div>
+        <div class="field"><label for="f-ruolo">Ruolo</label><input id="f-ruolo" type="text" placeholder="Progettista"></div>
+      </div>
+      <div class="row2" style="margin-bottom:10px">
+        <div class="field"><label for="f-email">Email <span class="req">*</span></label><input id="f-email" type="email" placeholder="mario@studio.it" autocomplete="email"></div>
+        <div class="field"><label for="f-tel">Telefono</label><input id="f-tel" type="tel" placeholder="347 000 0000" autocomplete="tel"></div>
+      </div>
+      <div class="field"><label for="f-note">Note</label><textarea id="f-note" placeholder="Richieste, dettagli del progetto…"></textarea></div>
+    </div>
+
+    <!-- GDPR doppio consenso -->
+    <div class="gdpr-block">
+      <p class="gdpr-info">
+        <strong>Informativa ai sensi dell'art. 13 Reg. UE 2016/679 (GDPR)</strong><br>
+        Titolare del trattamento: <strong>I.T.A. srl – Installazioni Termo Acustiche</strong> e i co-espositori selezionati.
+        I dati saranno trattati per gestione del contatto commerciale e invio di comunicazioni promozionali sui prodotti esposti.
+        Diritti (artt. 15–22 GDPR): <strong>privacy@installazionitermoacustiche.it</strong>
+      </p>
+      <div class="gdpr-row">
+        <input type="checkbox" id="f-cons1">
+        <div>
+          <label for="f-cons1">Acconsento al trattamento dei miei dati personali da parte di I.T.A. srl e dei co-espositori selezionati per la gestione del contatto commerciale. <span class="req">*</span></label>
+          <div class="perr" id="err-cons1">Consenso obbligatorio per procedere</div>
+        </div>
+      </div>
+      <div class="gdpr-row">
+        <input type="checkbox" id="f-cons2">
+        <div>
+          <label for="f-cons2">Acconsento a essere ricontattato/a da I.T.A. srl e dai co-espositori selezionati per l'invio di comunicazioni commerciali e promozionali. <span class="req">*</span> <em>(necessario per essere ricontattati dopo la fiera)</em></label>
+          <div class="perr" id="err-cons2">Consenso obbligatorio per procedere</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firma calligrafica -->
+    <div class="firma-section">
+      <span class="lbl">Firma <span class="req">*</span></span>
+      <div class="firma-canvas-box" id="firma-box">
+        <canvas id="firma-canvas"></canvas>
+      </div>
+      <div class="firma-bar">
+        <span class="firma-hint">Firma con il dito o con lo stilo nello spazio sopra</span>
+        <button type="button" class="btn-clear" id="firma-clear">Cancella</button>
+      </div>
+      <div class="perr" id="err-firma">Firma obbligatoria</div>
+    </div>
+  </main>
+
+  <div class="submit-bar">
+    <button class="btn-submit" id="btn-submit">Salva contatto →</button>
+  </div>
+</div>
+
+<!-- ── VIEW SUCCESSO ────────────────────────────────────────────── -->
+<div id="view-success">
+  <div class="ico">✅</div>
+  <h2>Contatto salvato!</h2>
+  <p>I dati sono stati registrati correttamente<br>nel sistema B-CAD 2026.</p>
+  <button class="btn-new" onclick="resetForm()">Nuovo contatto</button>
+</div>
+
+<!-- ── PANNELLO ADMIN ───────────────────────────────────────────── -->
+<div id="view-admin">
+  <div class="admin-header">
+    <div>
+      <div class="admin-title">Pannello ITA <span id="admin-count"></span></div>
+    </div>
+    <div class="admin-actions">
+      <button class="btn-exp btn-exp-filt" onclick="esportaCSV(false)">↓ Esporta filtrati</button>
+      <button class="btn-exp btn-exp-all"  onclick="esportaCSV(true)">↓ Esporta tutti</button>
+      <button class="btn-back" onclick="closeAdmin()">← Form</button>
+    </div>
+  </div>
+
+  <div class="chips" id="admin-chips"></div>
+
+  <div class="filters">
+    <label>Espositore</label>
+    <select id="filt-esp" onchange="renderTabella()">
+      <option value="Tutti">Tutti</option>
+      <option>Vaillant</option><option>Helty</option><option>Sunerg</option>
+      <option>Eurotherm</option><option>Thermofloc</option><option>Internorm</option>
+    </select>
+    <label>Data</label>
+    <select id="filt-data" onchange="renderTabella()">
+      <option value="Tutte">Tutte le date</option>
+    </select>
+    <label>Fonte</label>
+    <select id="filt-fonte" onchange="renderTabella()">
+      <option value="Tutti">Tutti</option>
+      <option>Staff</option>
+      <option>QR Visitatore</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Data/Ora</th><th>Nome</th><th>Azienda</th>
+          <th>Email</th><th>Tel</th><th>Espositori</th>
+          <th>Firmato</th><th>Fonte</th><th>Note</th>
+        </tr>
+      </thead>
+      <tbody id="admin-tbody"></tbody>
+    </table>
+  </div>
+  <p id="admin-loading" class="loading">Caricamento contatti…</p>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  CONFIGURAZIONE — aggiorna SCRIPT_URL dopo il deploy
+// ══════════════════════════════════════════════════════════════════
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmnai0L4XqOJXMdh4gx93KdmrQh8MuUkulWMOpkMFZaEF3j6apD5PwZyP05Moh2mAy/exec';
+var PIN_ADMIN  = '9991';
+
+// ══════════════════════════════════════════════════════════════════
+//  STATO
+// ══════════════════════════════════════════════════════════════════
+var selEsp     = new Set();
+var firmaVuota = true;
+var tuttiContatti = [];
+
+// ══════════════════════════════════════════════════════════════════
+//  ESPOSITORI — card selection
+// ══════════════════════════════════════════════════════════════════
+document.querySelectorAll('.esp-card').forEach(function(c) {
+  function toggle() {
+    var n = c.dataset.n;
+    selEsp.has(n) ? (selEsp.delete(n), c.classList.remove('sel'), c.setAttribute('aria-checked','false'))
+                  : (selEsp.add(n),    c.classList.add('sel'),    c.setAttribute('aria-checked','true'));
+    document.getElementById('esp-err').style.display = 'none';
+  }
+  c.addEventListener('click', toggle);
+  c.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();} });
+});
+
+// ══════════════════════════════════════════════════════════════════
+//  CANVAS FIRMA
+// ══════════════════════════════════════════════════════════════════
+var canvas  = document.getElementById('firma-canvas');
+var ctx     = canvas.getContext('2d');
+var firmBox = document.getElementById('firma-box');
+var drawing = false;
+
+function resizeCanvas() {
+  var w = firmBox.clientWidth || 320;
+  canvas.width  = w;
+  canvas.height = 150;
+  canvas.style.height = '150px';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, 150);
+  ctx.strokeStyle = '#09203B';
+  ctx.lineWidth   = 2.2;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+  firmaVuota = true;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function getPos(e) {
+  var r = canvas.getBoundingClientRect();
+  var s = e.touches ? e.touches[0] : e;
+  return { x: (s.clientX - r.left) * (canvas.width / r.width),
+           y: (s.clientY - r.top)  * (canvas.height / r.height) };
+}
+canvas.addEventListener('mousedown',  function(e){ drawing=true; var p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); firmaVuota=false; document.getElementById('err-firma').style.display='none'; });
+canvas.addEventListener('mousemove',  function(e){ if(!drawing) return; var p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+canvas.addEventListener('mouseup',    function(){ drawing=false; });
+canvas.addEventListener('mouseleave', function(){ drawing=false; });
+canvas.addEventListener('touchstart', function(e){ e.preventDefault(); drawing=true; var p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); firmaVuota=false; document.getElementById('err-firma').style.display='none'; }, {passive:false});
+canvas.addEventListener('touchmove',  function(e){ if(!drawing) return; e.preventDefault(); var p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); }, {passive:false});
+canvas.addEventListener('touchend',   function(){ drawing=false; });
+document.getElementById('firma-clear').addEventListener('click', function() {
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height); firmaVuota=true;
+});
+
+// ══════════════════════════════════════════════════════════════════
+//  SUBMIT FORM
+// ══════════════════════════════════════════════════════════════════
+document.getElementById('btn-submit').addEventListener('click', function() {
+  var ok = true;
+  document.getElementById('form-err').style.display = 'none';
+
+  if (selEsp.size === 0) { document.getElementById('esp-err').style.display=''; ok=false; }
+  var nome    = document.getElementById('f-nome').value.trim();
+  var cognome = document.getElementById('f-cognome').value.trim();
+  var azienda = document.getElementById('f-azienda').value.trim();
+  var email   = document.getElementById('f-email').value.trim();
+  if (!nome||!cognome||!azienda||!email) { ok=false; }
+  var c1 = document.getElementById('f-cons1').checked;
+  var c2 = document.getElementById('f-cons2').checked;
+  document.getElementById('err-cons1').style.display = c1 ? 'none' : '';
+  document.getElementById('err-cons2').style.display = c2 ? 'none' : '';
+  if (!c1||!c2) ok=false;
+  if (firmaVuota) { document.getElementById('err-firma').style.display=''; ok=false; }
+  else { document.getElementById('err-firma').style.display='none'; }
+  if (!ok) { window.scrollTo({top:0,behavior:'smooth'}); return; }
+
+  var btn = document.getElementById('btn-submit');
+  btn.disabled = true; btn.textContent = 'Salvataggio…';
+
+  // Comprimi firma in canvas 300×100
+  var oc = document.createElement('canvas'); oc.width=300; oc.height=100;
+  oc.getContext('2d').drawImage(canvas, 0, 0, 300, 100);
+  var firmaB64 = oc.toDataURL('image/png');
+
+  var payload = {
+    fonte: 'Staff',
+    nome: nome, cognome: cognome, azienda: azienda,
+    ruolo:    document.getElementById('f-ruolo').value.trim(),
+    email:    email,
+    telefono: document.getElementById('f-tel').value.trim(),
+    note:     document.getElementById('f-note').value.trim(),
+    espositori: [...selEsp],
+    consenso_trattamento: c1,
+    consenso_marketing:   c2,
+    firma: firmaB64
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    if (data.status === 'ok') {
+      showSuccess();
+    } else {
+      throw new Error(data.messaggio || 'Errore server');
+    }
+  })
+  .catch(function(err) {
+    var el = document.getElementById('form-err');
+    el.style.display = ''; el.textContent = 'Errore nel salvataggio. Riprova. (' + err.message + ')';
+    btn.disabled = false; btn.textContent = 'Salva contatto →';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+function showSuccess() {
+  document.getElementById('view-form').style.display = 'none';
+  document.getElementById('view-success').style.display = 'block';
+}
+
+function resetForm() {
+  // Reset espositori
+  selEsp.clear();
+  document.querySelectorAll('.esp-card').forEach(function(c){ c.classList.remove('sel'); c.setAttribute('aria-checked','false'); });
+  // Reset campi
+  ['f-nome','f-cognome','f-azienda','f-ruolo','f-email','f-tel','f-note'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  // Reset checkboxes
+  document.getElementById('f-cons1').checked = false;
+  document.getElementById('f-cons2').checked = false;
+  // Reset firma
+  resizeCanvas();
+  // Reset errori
+  document.getElementById('form-err').style.display = 'none';
+  // Ripristina btn
+  var btn = document.getElementById('btn-submit');
+  btn.disabled = false; btn.textContent = 'Salva contatto →';
+  // Mostra form
+  document.getElementById('view-success').style.display = 'none';
+  document.getElementById('view-form').style.display = 'block';
+  window.scrollTo({top:0});
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  PIN + PANNELLO ADMIN
+// ══════════════════════════════════════════════════════════════════
+function openPin() {
+  document.getElementById('view-pin').classList.add('open');
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-err').textContent = '';
+  setTimeout(function(){ document.getElementById('pin-input').focus(); }, 100);
+}
+function closePin() {
+  document.getElementById('view-pin').classList.remove('open');
+}
+document.getElementById('pin-input').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') doPin();
+});
+
+function doPin() {
+  var val = document.getElementById('pin-input').value.trim();
+  if (val !== PIN_ADMIN) {
+    document.getElementById('pin-err').textContent = 'Codice non valido';
+    document.getElementById('pin-input').value = '';
+    return;
+  }
+  closePin();
+  openAdmin();
+}
+
+function openAdmin() {
+  document.getElementById('view-form').style.display    = 'none';
+  document.getElementById('view-success').style.display = 'none';
+  document.getElementById('view-admin').style.display   = 'block';
+  document.getElementById('btn-open-admin').style.display = 'none';
+  caricaContatti();
+}
+
+function closeAdmin() {
+  document.getElementById('view-admin').style.display = 'none';
+  document.getElementById('view-form').style.display  = 'block';
+  document.getElementById('btn-open-admin').style.display = '';
+}
+
+function caricaContatti() {
+  document.getElementById('admin-loading').style.display = 'block';
+  document.getElementById('admin-tbody').innerHTML = '';
+
+  var url = SCRIPT_URL + '?action=contatti&pin=' + PIN_ADMIN;
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      document.getElementById('admin-loading').style.display = 'none';
+      if (data.status !== 'ok') { alert('Errore: ' + data.messaggio); return; }
+      tuttiContatti = data.contatti || [];
+      popolaFiltroDate();
+      renderChips();
+      renderTabella();
+    })
+    .catch(function(err) {
+      document.getElementById('admin-loading').style.display = 'none';
+      document.getElementById('admin-tbody').innerHTML =
+        '<tr class="empty-row"><td colspan="9">Errore caricamento: ' + err.message + '</td></tr>';
+    });
+}
+
+function popolaFiltroDate() {
+  var date = [...new Set(tuttiContatti.map(function(c){ return c.data; }))].sort();
+  var sel = document.getElementById('filt-data');
+  sel.innerHTML = '<option value="Tutte">Tutte le date</option>';
+  date.forEach(function(d) {
+    var o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o);
+  });
+}
+
+function filtrati() {
+  var esp   = document.getElementById('filt-esp').value;
+  var data  = document.getElementById('filt-data').value;
+  var fonte = document.getElementById('filt-fonte').value;
+  return tuttiContatti.filter(function(c) {
+    if (esp   !== 'Tutti'  && c.espositori.indexOf(esp) === -1) return false;
+    if (data  !== 'Tutte'  && c.data !== data)                  return false;
+    if (fonte !== 'Tutti'  && c.fonte !== fonte)                 return false;
+    return true;
+  });
+}
+
+function renderChips() {
+  var esps = ['Vaillant','Helty','Sunerg','Eurotherm','Thermofloc','Internorm'];
+  var html = '<div class="chip">Totale <strong>' + tuttiContatti.length + '</strong></div>';
+  esps.forEach(function(n) {
+    var cnt = tuttiContatti.filter(function(c){ return c.espositori.indexOf(n) !== -1; }).length;
+    html += '<div class="chip">' + n + ': <strong>' + cnt + '</strong></div>';
+  });
+  document.getElementById('admin-chips').innerHTML = html;
+}
+
+function renderTabella() {
+  var lista = filtrati();
+  document.getElementById('admin-count').textContent = '(' + lista.length + ')';
+  var tbody = document.getElementById('admin-tbody');
+  if (!lista.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="9">Nessun contatto trovato</td></tr>';
+    return;
+  }
+  tbody.innerHTML = lista.map(function(c) {
+    var tags = (c.espositori||[]).map(function(n){
+      return '<span class="esp-tag tag-'+n+'">'+n+'</span>';
+    }).join('');
+    return '<tr>' +
+      '<td style="white-space:nowrap">' + (c.data||'') + ' ' + (c.ora||'') + '</td>' +
+      '<td><div class="td-nome">' + esc(c.nome) + ' ' + esc(c.cognome) + '</div>' +
+          '<div class="td-ruolo">' + esc(c.ruolo||'') + '</div></td>' +
+      '<td>' + esc(c.azienda||'') + '</td>' +
+      '<td>' + esc(c.email||'') + '</td>' +
+      '<td style="white-space:nowrap">' + esc(c.telefono||'') + '</td>' +
+      '<td><div class="td-esp">' + tags + '</div></td>' +
+      '<td class="td-firmato">' + (c.firmato === '✓ Sì' ? '✓' : '–') + '</td>' +
+      '<td class="td-fonte">' + esc(c.fonte||'') + '</td>' +
+      '<td style="font-size:.76rem;color:var(--muted)">' + esc(c.note||'') + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  EXPORT CSV
+// ══════════════════════════════════════════════════════════════════
+function esportaCSV(tutti) {
+  var lista = tutti ? tuttiContatti : filtrati();
+  var cols = ['Data','Ora','Fonte','Nome','Cognome','Azienda','Ruolo','Email','Telefono',
+              'Vaillant','Helty','Sunerg','Eurotherm','Thermofloc','Internorm',
+              'Note','Consenso_Trattamento','Consenso_Marketing','Firmato'];
+  var rows = [cols.join(',')];
+  var esps = ['Vaillant','Helty','Sunerg','Eurotherm','Thermofloc','Internorm'];
+  lista.forEach(function(c) {
+    var espFlags = esps.map(function(n){ return c.espositori.indexOf(n)!==-1?'Sì':''; });
+    var row = [
+      c.data, c.ora, c.fonte,
+      c.nome, c.cognome, c.azienda, c.ruolo||'', c.email, c.telefono||''
+    ].concat(espFlags).concat([
+      c.note||'',
+      c.consenso_trattamento||'',
+      c.consenso_marketing||'',
+      c.firmato||''
+    ]);
+    rows.push(row.map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(','));
+  });
+  var csv = '﻿' + rows.join('\r\n');
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  var ts   = new Date().toISOString().slice(0,16).replace('T','_').replace(':','-');
+  a.href = url; a.download = 'bcad2026_contatti_' + ts + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
