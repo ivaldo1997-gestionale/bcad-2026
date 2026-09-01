@@ -2406,20 +2406,33 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
   if (!validateCap()) valid = false;
   if (!validateTel()) valid = false;
 
-  if (firmaVuota) { document.getElementById('err-firma').style.display=''; valid = false; }
-  else            { document.getElementById('err-firma').style.display='none'; }
-
+  // Privacy/consensi PRIMA della firma (firma bloccata finché c0 non è spuntato)
   if (!c0) {
     document.getElementById('err-cons0').style.display = '';
-    // Auto-open accordion so user can find and check the box
     const body = document.getElementById('privacy-body');
     if (body.hidden) togglePrivacy();
+    setTimeout(() => { document.getElementById('privacy-accordion').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
     valid = false;
   } else {
     document.getElementById('err-cons0').style.display = 'none';
   }
-  document.getElementById('err-cons1').style.display = c1 ? 'none' : '';
-  if (!c1) valid = false;
+
+  if (!c1) {
+    document.getElementById('err-cons1').style.display = '';
+    if (c0) setTimeout(() => { document.getElementById('locked-section').scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 80);
+    valid = false;
+  } else {
+    document.getElementById('err-cons1').style.display = 'none';
+  }
+
+  // Firma validata dopo i consensi
+  if (firmaVuota) {
+    document.getElementById('err-firma').style.display = '';
+    if (c0) setTimeout(() => { document.getElementById('locked-firma').scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 80);
+    valid = false;
+  } else {
+    document.getElementById('err-firma').style.display = 'none';
+  }
 
   if (!valid) return;
 
@@ -3311,6 +3324,8 @@ function onCons0Change(checked) {
     body.hidden = true;
     chevron.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
+    // Scrolla verso i checkbox ora sbloccati
+    setTimeout(() => { document.getElementById('locked-section').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
   }
 }
 
