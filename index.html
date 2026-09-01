@@ -3735,11 +3735,11 @@ function lsSet(k, v) { try { localStorage.setItem(LS_NS + k, JSON.stringify(v));
 (function() {
   var stored = localStorage.getItem('gas_url') || '';
   if (stored.indexOf('AKfycbwmnai0L4XqOJXMdh4gx93KdmrQh8MuUkulWMOpkMFZaEF3j6apD5PwZyP05Moh2mAy') !== -1) {
-    localStorage.setItem('gas_url', 'https://script.google.com/macros/s/AKfycbzBWE7ndFXZCU6dCJzMs6q1rzf5KhLyhkA2lkUrPjUhI7JTYMhIv-VZwUtESxlj5WN/exec');
+    localStorage.setItem('gas_url', 'https://script.google.com/macros/s/AKfycbycwzVJ3eBjB8gSiC8H_UMP09YM2RtPvn5bY6IrdS831uJ4349dbUtwiwb2q204wlfA/exec');
     console.log('[B-CAD] URL GAS migrato automaticamente a v14');
   }
 })();
-function gasUrl() { return lsGet('gas_url') || 'https://script.google.com/macros/s/AKfycbzBWE7ndFXZCU6dCJzMs6q1rzf5KhLyhkA2lkUrPjUhI7JTYMhIv-VZwUtESxlj5WN/exec'; }
+function gasUrl() { return lsGet('gas_url') || 'https://script.google.com/macros/s/AKfycbycwzVJ3eBjB8gSiC8H_UMP09YM2RtPvn5bY6IrdS831uJ4349dbUtwiwb2q204wlfA/exec'; }
 
 // ── Offline queue ────────────────────────────────────────────────────
 function updatePendingBadge() {
