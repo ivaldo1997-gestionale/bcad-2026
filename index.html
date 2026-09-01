@@ -105,6 +105,14 @@
     letter-spacing: .04em;
     text-transform: uppercase;
   }
+  .header-brand .brand-luogo {
+    display: block;
+    font-size: .7rem;
+    color: var(--text-muted);
+    letter-spacing: .05em;
+    margin-top: 1px;
+  }
+
   .header-right { display: flex; gap: 8px; align-items: center; }
   .btn-admin-trigger {
     background: rgba(74,184,176,.15);
@@ -464,6 +472,56 @@
   #toast.success { background: var(--success); }
   #toast.error   { background: var(--error); }
 
+  /* === OVERLAY GRAZIE === */
+  #overlay-grazie {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--navy);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+    animation: fadeInOverlay .35s ease;
+  }
+  #overlay-grazie.show { display: flex; }
+  @keyframes fadeInOverlay { from { opacity:0; transform:scale(.97); } to { opacity:1; transform:scale(1); } }
+  .grazie-check {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+    font-size: 2.8rem;
+    box-shadow: 0 0 0 12px rgba(74,184,176,.18);
+  }
+  .grazie-title {
+    font-family: "Caladea", Georgia, serif;
+    font-size: clamp(1.7rem, 5vw, 2.4rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .grazie-sub {
+    font-size: 1.05rem;
+    color: var(--cream);
+    margin-bottom: 32px;
+    max-width: 380px;
+    line-height: 1.55;
+  }
+  .grazie-actions button:hover { opacity:.88; transform:translateY(-1px); transition:all .15s; }
+  .grazie-actions {
+    width: 100%;
+    max-width: 280px;
+  }
+  .grazie-countdown {
+    font-size: .85rem;
+    color: rgba(230,218,190,.55);
+    letter-spacing: .04em;
+  }
+
   /* ─── Error inline ─── */
   .form-error {
     color: var(--error);
@@ -707,6 +765,96 @@
     border: 1px solid color-mix(in srgb, var(--teal) 25%, transparent);
   }
 
+
+  .badge-facoltativo {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: .70rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: color-mix(in srgb, var(--teal) 18%, var(--surface));
+    color: var(--teal-deep);
+    border: 1px solid color-mix(in srgb, var(--teal) 30%, transparent);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-mkt-ok {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 8px;
+    font-size: .68rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    margin-top: 3px;
+  }
+  .badge-mkt-no {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 8px;
+    font-size: .68rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    margin-top: 3px;
+  }
+
+  /* ─── Tooltip badge mkt ─── */
+  .mkt-tip {
+    position: relative;
+    cursor: default;
+  }
+  .mkt-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a2a3a;
+    color: #e8e0cc;
+    font-size: .74rem;
+    font-weight: 400;
+    line-height: 1.45;
+    padding: 7px 10px;
+    border-radius: 7px;
+    white-space: normal;
+    width: 220px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.22);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s;
+    z-index: 999;
+  }
+  .mkt-tip:hover::after {
+    opacity: 1;
+  }
+
+  /* ─── CAP + Telefono layout ─── */
+  .cap-tel-row { display:flex; gap:10px; align-items:flex-start; }
+  .cap-tel-row > div:first-child { flex:0 0 88px; }
+  .cap-tel-row > div:last-child  { flex:1; }
+  .tel-row { display:flex; gap:5px; }
+  .tel-prefix-sel {
+    flex: 0 0 70px;
+    padding: 8px 4px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm, 8px);
+    background: var(--surface);
+    color: var(--text);
+    font-size: .82rem;
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    text-align: center;
+  }
+  .tel-prefix-sel:focus { outline:none; border-color:var(--teal); }
+  .cap-tel-label { font-size:.82rem; font-weight:600; display:block; margin-bottom:4px; color:var(--text); }
   /* Empty state */
   .empty-state {
     text-align: center;
@@ -751,7 +899,7 @@
   /* ─── Firma ─── */
   .firma-section{margin-bottom:16px}
   .firma-canvas-box{background:#fff;border:1.5px solid var(--teal);border-radius:10px;overflow:hidden;touch-action:none;cursor:crosshair}
-  .firma-canvas-box canvas{display:block;width:100%;height:130px}
+  .firma-canvas-box canvas{display:block;width:100%;height:130px;touch-action:none;-ms-touch-action:none;}
   .firma-bar{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
   .firma-hint{font-size:.7rem;color:var(--text-muted)}
   .btn-clear{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:.76rem;color:var(--text-muted);cursor:pointer}
@@ -1093,17 +1241,23 @@
     transition: border-color .15s;
     cursor: default;
   }
-  .sec-card.hidden-esp { opacity: .45; border-style: dashed; }
   .sec-card .sec-logo { height: 32px; display: flex; align-items: center; justify-content: center; }
   .sec-card .sec-logo img { height: 28px; width: auto; max-width: 120px; object-fit: contain; }
   .sec-card .sec-logo .logo-badge { width: 36px; height: 28px; font-size: 16px; margin: 0; }
   .sec-card .sec-name { font-size: .78rem; font-weight: 700; color: var(--text); text-align: center; }
   .sec-card .sec-desc { font-size: .65rem; color: var(--text-muted); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-  .sec-card-actions {
-    display: flex;
-    gap: 4px;
-    margin-top: 4px;
-    justify-content: center;
+  .sec-card-actions { display: none; }
+  .sec-card[draggable] { cursor: grab; }
+  .sec-card[draggable]:active { cursor: grabbing; }
+  .sec-card.dragging { opacity: .35; border-style: dashed; }
+  .sec-card.drag-over { border-color: var(--teal); background: rgba(74,184,176,.07); }
+  .drag-handle {
+    font-size: .9rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    user-select: none;
+    letter-spacing: .1em;
+    line-height: 1;
   }
   .btn-sec-remove {
     position: absolute;
@@ -1121,20 +1275,91 @@
     transition: background .12s;
   }
   .btn-sec-remove:hover { background: #fde8e8; }
-  .btn-sec-toggle {
-    padding: 2px 7px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--field-bg);
-    color: var(--text-muted);
-    font-size: .68rem;
-    cursor: pointer;
-    transition: background .12s;
+  /* btn-sec-move removed — drag & drop */
+
+  /* Notifiche email partner */
+  .notifica-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
   }
-  .btn-sec-toggle.on { background: var(--teal); color: #fff; border-color: var(--teal); }
-  .btn-sec-toggle.off { background: var(--field-bg); color: var(--text-muted); }
-  .btn-sec-move { padding: 2px 5px; border: 1px solid var(--border); border-radius: 4px; background: var(--field-bg); color: var(--text-muted); font-size: .75rem; cursor: pointer; }
-  .btn-sec-move:hover { background: var(--cream); }
+  .notifica-row:last-child { border-bottom: none; }
+  .notifica-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .notifica-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .notifica-email-input {
+    font-size: .82rem;
+    padding: 6px 9px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: var(--field-bg);
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    width: 100%;
+    transition: border-color .15s;
+  }
+  .notifica-email-input:focus { border-color: var(--teal); }
+  .notifica-email-input::placeholder { color: var(--text-muted); opacity: .55; }
+  .notifica-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .notifica-toggle input[type=checkbox] {
+    width: 0; height: 0; opacity: 0; position: absolute;
+  }
+  .notifica-switch {
+    width: 42px; height: 24px;
+    border-radius: 12px;
+    background: var(--border);
+    position: relative;
+    cursor: pointer;
+    transition: background .2s;
+    flex-shrink: 0;
+  }
+  .notifica-switch::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    top: 3px; left: 3px;
+    transition: transform .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  }
+  .notifica-switch.on { background: var(--teal); }
+  .notifica-switch.on::after { transform: translateX(18px); }
+  .notifica-switch.disabled { opacity: .4; cursor: not-allowed; }
+  .notifica-switch-label {
+    font-size: .62rem;
+    color: var(--text-muted);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .notifica-switch.on + .notifica-switch-label { color: var(--teal); font-weight: 700; }
+  @media (max-width: 480px) {
+    .notifica-row { grid-template-columns: 1fr auto; grid-template-rows: auto auto; }
+    .notifica-brand { grid-column: 1; }
+    .notifica-toggle { grid-column: 2; grid-row: 1 / 3; }
+    .notifica-email-input { grid-column: 1; }
+  }
+
   .sec-empty { font-size:.85rem; color:var(--text-muted); font-style:italic; text-align:center; padding:16px 0; }
 
   /* ─── Logo dropzone ─── */
@@ -1269,6 +1494,7 @@
     <div class="header-brand">
       <span class="brand-main" id="form-brand-main">B-CAD 2026</span>
       <span class="brand-sub" id="form-brand-sub">Raccolta Contatti</span>
+      <span class="brand-luogo" id="form-brand-luogo" hidden></span>
     </div>
     <div class="header-right">
       <button class="btn-admin-trigger" id="btn-open-admin">Pannello ITA</button>
@@ -1332,17 +1558,20 @@
         <div class="form-row" style="margin-bottom:12px">
           <div class="field">
             <label for="f-nome">Nome <span class="req">*</span></label>
-            <input type="text" id="f-nome" placeholder="Mario" autocomplete="given-name" autocapitalize="words" onblur="capWords(this)" required>
+            <input type="text" id="f-nome" placeholder="Mario" autocomplete="given-name" autocapitalize="words" onblur="capWords(this)" oninput="clearFieldErr('err-nome'); seqCheck()" required>
+            <div class="form-error" id="err-nome" style="display:none">Il nome è obbligatorio</div>
           </div>
           <div class="field">
             <label for="f-cognome">Cognome <span class="req">*</span></label>
-            <input type="text" id="f-cognome" placeholder="Rossi" autocomplete="family-name" autocapitalize="words" onblur="capWords(this)" required>
+            <input type="text" id="f-cognome" placeholder="Rossi" autocomplete="family-name" autocapitalize="words" onblur="capWords(this)" oninput="clearFieldErr('err-cognome'); seqCheck()" required>
+            <div class="form-error" id="err-cognome" style="display:none">Il cognome è obbligatorio</div>
           </div>
         </div>
         <div class="form-row" style="margin-bottom:12px">
           <div class="field">
             <label for="f-azienda">Azienda <span class="req">*</span></label>
-            <input type="text" id="f-azienda" placeholder="Studio Rossi" autocomplete="organization" autocapitalize="sentences" onblur="capFirst(this)" required>
+            <input type="text" id="f-azienda" placeholder="Studio Rossi" autocomplete="organization" autocapitalize="words" onblur="capWords(this)" oninput="clearFieldErr('err-azienda'); seqCheck()" required>
+            <div class="form-error" id="err-azienda" style="display:none">L'azienda è obbligatoria</div>
           </div>
           <div class="field">
             <div class="dual-select">
@@ -1375,12 +1604,33 @@
         <div class="form-row" style="margin-bottom:12px">
           <div class="field">
             <label for="f-email">Email <span class="req">*</span></label>
-            <input type="email" id="f-email" placeholder="mario@studio.it" autocomplete="email" required>
+            <input type="email" id="f-email" placeholder="mario@studio.it" autocomplete="email" required onblur="validateEmailField(); seqCheck()" oninput="seqCheck()">
+            <div class="form-error" id="err-email" style="display:none">Verifica l'indirizzo email — il formato non sembra corretto</div>
           </div>
           <div class="field">
-            <div class="dual-select">
-              <input type="text" id="f-cap" placeholder="00100" maxlength="5" pattern="[0-9]{5}" autocomplete="postal-code" inputmode="numeric" required>
-              <input type="tel" id="f-tel" placeholder="347 000 0000" autocomplete="tel">
+            <div class="cap-tel-row">
+              <div>
+                <label for="f-cap" class="cap-tel-label">CAP</label>
+                <input type="text" id="f-cap" placeholder="00100" maxlength="5" inputmode="numeric" autocomplete="postal-code" onblur="validateCap()">
+                <div class="form-error" id="err-cap" style="display:none">Inserisci un CAP valido (5 cifre)</div>
+              </div>
+              <div>
+                <label for="f-tel" class="cap-tel-label">Telefono <span class="req">*</span></label>
+                <div class="tel-row">
+                  <select id="f-tel-prefix" class="tel-prefix-sel" autocomplete="tel-country-code">
+                    <option value="0039">🇮🇹 +39</option>
+                    <option value="0041">🇨🇭 +41</option>
+                    <option value="0043">🇦🇹 +43</option>
+                    <option value="0049">🇩🇪 +49</option>
+                    <option value="0033">🇫🇷 +33</option>
+                    <option value="0034">🇪🇸 +34</option>
+                    <option value="0044">🇬🇧 +44</option>
+                    <option value="001">🇺🇸 +1</option>
+                  </select>
+                  <input type="tel" id="f-tel" placeholder="347 000 0000" autocomplete="tel-national" onblur="validateTel()" style="flex:1">
+                </div>
+                <div class="form-error" id="err-tel" style="display:none">Numero non valido — almeno 6 cifre</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1453,14 +1703,14 @@
             </div>
           </div>
 
-          <!-- Consenso 2: comunicazioni -->
+          <!-- Consenso 2: comunicazioni (facoltativo) -->
           <div class="gdpr-row">
             <input type="checkbox" id="f-cons2">
             <div>
               <label for="f-cons2" class="gdpr-text">
-                Acconsento a essere ricontattato/a da I.T.A. srl e dai co-espositori selezionati per l'invio di comunicazioni commerciali e promozionali. <strong>*</strong> <em>(necessario per essere ricontattati dopo la fiera)</em>
+                Acconsento a essere ricontattato/a da I.T.A. srl e dai co-espositori selezionati per l'invio di comunicazioni commerciali e promozionali.<span class="badge-facoltativo">Facoltativo</span>
               </label>
-              <div class="form-error" id="err-cons2" style="display:none">Consenso obbligatorio per procedere</div>
+              <div id="err-cons2" style="display:none"></div>
             </div>
           </div>
 
@@ -1524,9 +1774,10 @@
 
       <!-- Tab bar -->
       <div class="admin-tabs">
-        <button class="admin-tab active" id="tab-btn-contatti" onclick="switchAdminTab('contatti')">Contatti</button>
-        <button class="admin-tab" id="tab-btn-impostazioni" onclick="switchAdminTab('impostazioni')">⚙ Impostazioni</button>
-        <button class="admin-tab" id="tab-btn-guida" onclick="switchAdminTab('guida')">📋 Guida</button>
+        <button class="admin-tab active" id="tab-btn-contatti" onclick="switchAdminTab('contatti')">👥 Contatti</button>
+        <button class="admin-tab" id="tab-btn-espositori" onclick="switchAdminTab('espositori')">🏢 Espositori</button>
+        <button class="admin-tab" id="tab-btn-config" onclick="switchAdminTab('config')">⚙ Config</button>
+        <button class="admin-tab" id="tab-btn-guida" onclick="switchAdminTab('guida')">📖 Guida</button>
       </div>
 
       <!-- TAB: Contatti -->
@@ -1536,6 +1787,8 @@
             Contatti
             <span id="count-label">caricamento…</span>
           </div>
+          <!-- Badge contatti in attesa di rete -->
+          <div id="pending-badge" style="display:none;background:#f59e0b;color:#fff;font-size:.82rem;font-weight:700;padding:5px 12px;border-radius:20px;margin:6px 0 2px;">⏳ <span id="pending-count">0</span> contatto/i in attesa di rete</div>
           <div class="admin-actions">
             <button class="btn-export teal" id="btn-export-filter">⬇ Esporta filtrati</button>
             <button class="btn-export" id="btn-export-all">⬇ Esporta tutti</button>
@@ -1570,78 +1823,63 @@
         </div>
       </div>
 
-      <!-- TAB: Impostazioni -->
-      <div id="tab-impostazioni" hidden>
 
-        <!-- Backend -->
-        <div class="settings-section" id="section-backend">
-          <h3>🔗 Backend (Google Apps Script)</h3>
-          <p style="font-size:.82rem;color:var(--text-muted);margin:0 0 12px">
-            Incolla l&#39;URL del web app Google Apps Script che raccoglie i dati nel foglio Google Sheets.
-            Senza questo URL i contatti non vengono salvati.
-          </p>
-          <div class="settings-row">
-            <div class="settings-field" style="flex:3">
-              <label>URL Web App (Google Apps Script)</label>
-              <input type="url" id="s-gas-url" placeholder="https://script.google.com/macros/s/…/exec" style="font-size:.78rem">
-            </div>
-            <div class="settings-field" style="flex:1;min-width:110px">
-              <label>PIN admin</label>
-              <input type="text" id="s-gas-pin" placeholder="9991" maxlength="10">
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
-            <button class="btn-settings" onclick="saveBackendSettings()">💾 Salva configurazione</button>
-            <button class="btn-settings secondary" onclick="testBackendConnection()">🔌 Testa connessione</button>
-            <button class="btn-settings secondary" onclick="generaLinkConfig()" title="Copia un link con tutta la configurazione">📋 Genera link configurato</button>
-          </div>
-          <div id="backend-status" style="font-size:.79rem;margin-top:8px;min-height:18px"></div>
-        </div>
 
-        <!-- Evento -->
-        <div class="settings-section">
-          <h3>🗓 Evento</h3>
-          <div class="settings-row">
-            <div class="settings-field">
-              <label>Titolo form</label>
-              <input type="text" id="s-titolo" placeholder="B-CAD 2026" maxlength="60">
-            </div>
-            <div class="settings-field">
-              <label>Sottotitolo / descrizione</label>
-              <input type="text" id="s-sub" placeholder="Raccolta Contatti" maxlength="80">
-            </div>
-            <button class="btn-settings" onclick="saveEventoSettings()">💾 Salva evento</button>
-          </div>
-        </div>
 
-        <!-- Privacy / Titolare -->
-        <div class="settings-section">
-          <h3>🔒 Titolare del trattamento (Privacy)</h3>
-          <p style="font-size:.82rem;color:var(--text-muted);margin:0 0 12px">Dati obbligatori ai sensi dell'art. 13 Reg. UE 2016/679, mostrati nell'informativa del form visitatori.</p>
-          <div class="settings-row">
-            <div class="settings-field" style="flex:2">
-              <label>Sede legale <span style="color:var(--error)">*</span></label>
-              <input type="text" id="s-sede" placeholder="Via Esempio 1, 00100 Roma" maxlength="120">
-            </div>
-            <div class="settings-field" style="flex:1">
-              <label>P.IVA <span style="color:var(--error)">*</span></label>
-              <input type="text" id="s-piva" placeholder="IT00000000000" maxlength="20">
-            </div>
-          </div>
-          <div class="settings-row" style="margin-top:6px">
-            <div class="settings-field" style="flex:1">
-              <label>Email privacy <span style="color:var(--error)">*</span></label>
-              <input type="email" id="s-email-privacy" placeholder="privacy@azienda.it" maxlength="80">
-            </div>
-            <button class="btn-settings" onclick="savePrivacySettings()">💾 Salva privacy</button>
-          </div>
+
+      </div><!-- /tab-contatti -->
+
+      <!-- TAB: Espositori -->
+      <div id="tab-espositori" hidden>
+
+      <!-- Sezione: Invia report ai brand -->
+      <div id="report-section" style="margin:20px 0 8px;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;">
+        <div id="report-toggle-header" onclick="toggleReportSection()"
+          style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;background:var(--surface);user-select:none;">
+          <span style="font-weight:700;font-size:.97rem;color:var(--navy)">📧 Invia report ai brand</span>
+          <span id="report-toggle-icon" style="font-size:.85rem;color:var(--text-muted)">▼</span>
         </div>
+        <div id="report-body" hidden style="padding:16px;display:flex;flex-direction:column;gap:14px;background:var(--bg);">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <label style="font-size:.88rem;font-weight:600">Periodo</label>
+            <select id="report-periodo" style="padding:6px 10px;border-radius:6px;border:1px solid var(--border);font-size:.9rem;background:var(--surface);color:var(--text);">
+              <option value="day1">Giorno 1 — 4 set</option>
+              <option value="day2">Giorno 2 — 5 set</option>
+              <option value="day3">Giorno 3 — 6 set</option>
+              <option value="test">🧪 Test — ante fiera</option>
+              <option value="all">Tutta la fiera</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:.88rem;font-weight:600;margin-bottom:8px;">Brand destinatari</div>
+            <div id="report-brand-checks" style="display:flex;flex-direction:column;gap:7px;"></div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <button onclick="reportSelectAll(true)" style="font-size:.8rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;">Seleziona tutti</button>
+              <button onclick="reportSelectAll(false)" style="font-size:.8rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;">Deseleziona tutti</button>
+            </div>
+          </div>
+          <button id="btn-report-send" onclick="inviaReportBrand()"
+            style="padding:11px 20px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;align-self:flex-start;">
+            📤 Invia report
+          </button>
+        </div>
+      </div>
 
         <!-- Espositori attivi -->
         <div class="settings-section">
           <h3>🏢 Espositori attivi <span style="font-size:.75rem;font-weight:400;color:var(--text-muted)">(clicca ✕ per rimuovere)</span></h3>
           <div class="sec-cards-grid" id="settings-esp-list"></div>
           <button class="btn-settings" onclick="saveEspSettings()" style="margin-top:4px">💾 Applica e salva</button>
+        </div>
+
+        <!-- Notifiche email partner -->
+        <div class="settings-section">
+          <h3>✉️ Notifiche email partner</h3>
+          <p style="font-size:.82rem;color:var(--text-muted);margin:0 0 14px">
+            Per ogni brand attivo puoi impostare un indirizzo email. Se il flag è attivo, il partner riceve una notifica automatica ogni volta che un visitatore seleziona il suo brand.
+          </p>
+          <div id="notifiche-esp-list"></div>
+          <button class="btn-settings" onclick="saveNotificheSettings()" style="margin-top:8px">💾 Salva notifiche</button>
         </div>
 
         <!-- Catalogo espositori -->
@@ -1688,6 +1926,77 @@
           </div>
         </div>
 
+      </div><!-- /tab-espositori -->
+
+      <!-- TAB: Config -->
+      <div id="tab-config" hidden>
+
+        <!-- Backend -->
+        <div class="settings-section" id="section-backend">
+          <h3>🔗 Backend (Google Apps Script)</h3>
+          <p style="font-size:.82rem;color:var(--text-muted);margin:0 0 12px">
+            Incolla l&#39;URL del web app Google Apps Script che raccoglie i dati nel foglio Google Sheets.
+            Senza questo URL i contatti non vengono salvati.
+          </p>
+          <div class="settings-row">
+            <div class="settings-field" style="flex:3">
+              <label>URL Web App (Google Apps Script)</label>
+              <input type="url" id="s-gas-url" placeholder="https://script.google.com/macros/s/…/exec" style="font-size:.78rem">
+            </div>
+            <div class="settings-field" style="flex:1;min-width:110px">
+              <label>PIN admin</label>
+              <input type="text" id="s-gas-pin" placeholder="9991" maxlength="10">
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+            <button class="btn-settings" onclick="saveBackendSettings()">💾 Salva configurazione</button>
+            <button class="btn-settings secondary" onclick="testBackendConnection()">🔌 Testa connessione</button>
+            <button class="btn-settings secondary" onclick="generaLinkConfig()" title="Copia un link con tutta la configurazione">📋 Genera link configurato</button>
+          </div>
+          <div id="backend-status" style="font-size:.79rem;margin-top:8px;min-height:18px"></div>
+        </div>
+
+        <!-- Evento -->
+        <div class="settings-section">
+          <h3>🗓 Evento</h3>
+          <div class="settings-row">
+            <div class="settings-field">
+              <label>Titolo form</label>
+              <input type="text" id="s-titolo" placeholder="B-CAD 2026" maxlength="60">
+            </div>
+            <div class="settings-field">
+              <label>Sottotitolo / descrizione</label>
+              <input type="text" id="s-sub" placeholder="Raccolta Contatti" maxlength="80">
+            </div>
+              <label>Luogo / sede evento</label>
+              <input type="text" id="s-luogo" placeholder="La Nuvola di Fuksas — Viale Asia 40, Roma" maxlength="100">
+            <button class="btn-settings" onclick="saveEventoSettings()">💾 Salva evento</button>
+          </div>
+        </div>
+
+        <!-- Privacy / Titolare -->
+        <div class="settings-section">
+          <h3>🔒 Titolare del trattamento (Privacy)</h3>
+          <p style="font-size:.82rem;color:var(--text-muted);margin:0 0 12px">Dati obbligatori ai sensi dell'art. 13 Reg. UE 2016/679, mostrati nell'informativa del form visitatori.</p>
+          <div class="settings-row">
+            <div class="settings-field" style="flex:2">
+              <label>Sede legale <span style="color:var(--error)">*</span></label>
+              <input type="text" id="s-sede" placeholder="Via Esempio 1, 00100 Roma" maxlength="120">
+            </div>
+            <div class="settings-field" style="flex:1">
+              <label>P.IVA <span style="color:var(--error)">*</span></label>
+              <input type="text" id="s-piva" placeholder="IT00000000000" maxlength="20">
+            </div>
+          </div>
+          <div class="settings-row" style="margin-top:6px">
+            <div class="settings-field" style="flex:1">
+              <label>Email privacy <span style="color:var(--error)">*</span></label>
+              <input type="email" id="s-email-privacy" placeholder="privacy@azienda.it" maxlength="80">
+            </div>
+            <button class="btn-settings" onclick="savePrivacySettings()">💾 Salva privacy</button>
+          </div>
+        </div>
+
         <!-- Archivio configurazioni -->
         <div class="settings-section">
           <h3>📁 Archivio configurazioni</h3>
@@ -1699,7 +2008,28 @@
           <div id="archive-list"><p class="empty-msg">Caricamento…</p></div>
         </div>
 
-      </div><!-- /tab-impostazioni -->
+
+
+
+        <!-- Pulizia dati di test -->
+        <div class="settings-section">
+          <h3>🗑 Pulizia dati di test</h3>
+          <p style="font-size:.82rem;color:var(--text-muted);margin:0 0 12px">
+            Elimina dal foglio Google Sheets tutti i contatti con data anteriore al <strong>4 settembre 2026</strong> (inizio fiera). Utile per rimuovere i contatti inseriti durante i test prima della fiera.
+          </p>
+          <div id="elimina-test-confirm" hidden style="background:color-mix(in srgb,var(--error) 10%,var(--surface));border:1.5px solid color-mix(in srgb,var(--error) 30%,transparent);border-radius:8px;padding:12px 14px;margin-bottom:12px;">
+            <p style="margin:0 0 10px;font-size:.88rem;font-weight:600;color:var(--error)">⚠️ Conferma eliminazione</p>
+            <p style="margin:0 0 12px;font-size:.83rem">Questa operazione è <strong>irreversibile</strong>. Verranno eliminati tutti i contatti con data &lt; 04/09/2026.</p>
+            <div style="display:flex;gap:8px">
+              <button class="btn-settings" style="background:var(--error);color:#fff;border-color:var(--error)" onclick="eseguiEliminaTest()">✓ Confermo — elimina</button>
+              <button class="btn-settings secondary" onclick="document.getElementById('elimina-test-confirm').hidden=true">Annulla</button>
+            </div>
+          </div>
+          <div id="elimina-test-result" style="font-size:.82rem;min-height:18px;margin-bottom:10px"></div>
+          <button class="btn-settings secondary" onclick="document.getElementById('elimina-test-confirm').hidden=false;document.getElementById('elimina-test-result').textContent=''">🗑 Elimina contatti di test</button>
+        </div>
+
+      </div><!-- /tab-config -->
 
       <!-- TAB: Guida -->
       <div id="tab-guida" hidden>
@@ -1839,7 +2169,31 @@
 <!-- ─── Toast ─── -->
 <div id="toast"></div>
 
+<!-- OVERLAY GRAZIE -->
+<div id="overlay-grazie">
+  <div class="grazie-check">✓</div>
+  <div class="grazie-title" id="grazie-nome">Grazie!</div>
+  <div class="grazie-sub">I tuoi dati sono stati registrati.<br>Un nostro esperto ti contatterà presto.</div>
+  <div class="grazie-countdown" id="grazie-cntd">Nuova schermata tra <strong>8</strong>s…</div>
+  <div class="grazie-actions" id="grazie-actions" style="display:none;flex-direction:column;align-items:center;gap:12px;margin-top:20px;">
+    <button id="grazie-btn-nuovo" onclick="graziNuovo()"
+      style="background:#4AB8B0;color:#fff;border:none;border-radius:8px;padding:13px 32px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:.02em;min-width:200px;">
+      ➕ Nuovo contatto
+    </button>
+    <button id="grazie-btn-chiudi" onclick="grazieChiudi()"
+      style="display:none;background:transparent;color:rgba(255,255,255,.7);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;padding:10px 32px;font-size:.9rem;font-weight:600;cursor:pointer;min-width:200px;">
+      ✕ Chiudi app
+    </button>
+    <div id="grazie-chiudi-msg" style="display:none;font-size:.85rem;color:rgba(255,255,255,.75);text-align:center;line-height:1.5;">
+      Puoi chiudere questa scheda<br>dal browser o dal tasto indietro.
+    </div>
+  </div>
+</div>
+
 <script>
+
+
+
 /* ════════════════════════════════════════════════════════════════════
    B-CAD 2026 — App Raccolta Contatti ITA Srl
    ════════════════════════════════════════════════════════════════════ */
@@ -1937,6 +2291,71 @@ function showAdmin() {
 });
 
 // ── Form submission ────────────────────────────────────────────────
+function clearFieldErr(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function seqDisable(id, off) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.disabled = off;
+  el.style.opacity = off ? '0.35' : '';
+  el.style.pointerEvents = off ? 'none' : '';
+}
+
+function seqCheck() {
+  var nome    = (document.getElementById('f-nome')    || {value:''}).value.trim();
+  var cognome = (document.getElementById('f-cognome') || {value:''}).value.trim();
+  var azienda = (document.getElementById('f-azienda') || {value:''}).value.trim();
+  var email   = (document.getElementById('f-email')   || {value:''}).value.trim();
+  var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+
+  var okCognome = !!nome;
+  var okAzienda = !!(nome && cognome);
+  var okEmail   = !!(nome && cognome && azienda);
+  var okTel     = !!(okEmail && emailOk);
+
+  seqDisable('f-cognome',    !okCognome);
+  seqDisable('f-azienda',    !okAzienda);
+  seqDisable('f-titolo',     !okAzienda);
+  seqDisable('f-ruolo',      !okAzienda);
+  seqDisable('f-email',      !okEmail);
+  seqDisable('f-cap',        !okEmail);
+  seqDisable('f-tel-prefix', !okTel);
+  seqDisable('f-tel',        !okTel);
+  seqDisable('f-note-sel',   !okEmail);
+  seqDisable('f-note',       !okEmail);
+}
+
+function validateEmailField() {
+  var val = document.getElementById('f-email').value.trim();
+  var errEl = document.getElementById('err-email');
+  if (!errEl) return true;
+  var ok = !val || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+  errEl.style.display = ok ? 'none' : '';
+  return ok;
+}
+
+function validateCap() {
+  var val = document.getElementById('f-cap').value.trim();
+  var errEl = document.getElementById('err-cap');
+  var ok = !val || /^\d{5}$/.test(val);
+  if (errEl) errEl.style.display = ok ? 'none' : '';
+  return ok;
+}
+
+function validateTel() {
+  var val = document.getElementById('f-tel').value.trim();
+  var errEl = document.getElementById('err-tel');
+  var ok = val.length > 0 && /[\d]{6,}/.test(val.replace(/[\s\-\.]/g,''));
+  if (errEl) errEl.style.display = ok ? 'none' : (val ? '' : '');
+  // messaggio diverso se vuoto o formato errato
+  if (errEl) errEl.textContent = !val ? 'Il telefono è obbligatorio' : 'Numero non valido — almeno 6 cifre';
+  if (errEl) errEl.style.display = ok ? 'none' : '';
+  return ok;
+}
+
 document.getElementById('contact-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   let valid = true;
@@ -1958,10 +2377,34 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
   const c1      = document.getElementById('f-cons1').checked;
   const c2      = document.getElementById('f-cons2').checked;
 
-  if (!nome || !cognome || !azienda || !email) {
-    showToast('Compila i campi obbligatori (*)', 'error');
+  var _firstErrEl = null;
+  [
+    { id: 'f-nome',    err: 'err-nome',    val: nome,    msg: 'Il nome è obbligatorio' },
+    { id: 'f-cognome', err: 'err-cognome', val: cognome, msg: 'Il cognome è obbligatorio' },
+    { id: 'f-azienda', err: 'err-azienda', val: azienda, msg: "L'azienda è obbligatoria" },
+  ].forEach(function(f) {
+    var errEl = document.getElementById(f.err);
+    if (!f.val) {
+      if (errEl) { errEl.textContent = f.msg; errEl.style.display = ''; }
+      if (!_firstErrEl) _firstErrEl = document.getElementById(f.id);
+      valid = false;
+    } else {
+      if (errEl) errEl.style.display = 'none';
+    }
+  });
+  if (_firstErrEl) { _firstErrEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); _firstErrEl.focus(); }
+
+  // Validazione formato email
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  document.getElementById('err-email').style.display = emailOk ? 'none' : '';
+  if (!emailOk) {
+    document.getElementById('f-email').focus();
     valid = false;
   }
+
+  // Validazione CAP e telefono
+  if (!validateCap()) valid = false;
+  if (!validateTel()) valid = false;
 
   if (firmaVuota) { document.getElementById('err-firma').style.display=''; valid = false; }
   else            { document.getElementById('err-firma').style.display='none'; }
@@ -1976,8 +2419,7 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
     document.getElementById('err-cons0').style.display = 'none';
   }
   document.getElementById('err-cons1').style.display = c1 ? 'none' : '';
-  document.getElementById('err-cons2').style.display = c2 ? 'none' : '';
-  if (!c1 || !c2) valid = false;
+  if (!c1) valid = false;
 
   if (!valid) return;
 
@@ -2002,7 +2444,7 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
     titolo:  document.getElementById('f-titolo').value.trim(),
     ruolo:   document.getElementById('f-ruolo').value.trim(),
     email,
-    telefono: document.getElementById('f-tel').value.trim(),
+    telefono: (function(){ var p=document.getElementById('f-tel-prefix'); var n=document.getElementById('f-tel').value.trim(); return n?(p?p.value+' ':'')+n:''; })(),
     cap:      document.getElementById('f-cap').value.trim(),
     note: (function(){
       var sel = document.getElementById('f-note-sel');
@@ -2021,11 +2463,15 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
 
   try {
     await db.collection('contacts').add(contact);
-    showToast('✓ Contatto salvato', 'success');
-    resetForm();
+    showGrazie(contact.nome);
   } catch (err) {
     console.error('Save error', err);
-    showToast('Errore salvataggio: ' + (err.message || err.code), 'error', 4000);
+    if (err.code === 'OFFLINE_QUEUED') {
+      // Messaggio visibile al visitatore: non tecnico, invita a contattare lo staff
+      showOfflineError();
+    } else {
+      showToast('Errore salvataggio: ' + (err.message || err.code), 'error', 4000);
+    }
   } finally {
     btn.disabled = false;
     btn.textContent = 'Salva contatto →';
@@ -2046,6 +2492,153 @@ function onNoteSelChange(val) {
     var ta = document.getElementById('f-note');
     if (ta) ta.value = '';
   }
+}
+
+// ── Report brand ─────────────────────────────────────────────────────
+function toggleReportSection() {
+  var body = document.getElementById('report-body');
+  var icon = document.getElementById('report-toggle-icon');
+  if (!body) return;
+  body.hidden = !body.hidden;
+  if (icon) icon.textContent = body.hidden ? '▼' : '▲';
+}
+
+function reportSelectAll(val) {
+  document.querySelectorAll('.report-brand-cb').forEach(function(cb) { cb.checked = val; });
+}
+
+function renderReportBrandList() {
+  var container = document.getElementById('report-brand-checks');
+  if (!container) return;
+  var esps = (typeof settingsEspositori !== 'undefined' ? settingsEspositori : [])
+    .filter(function(e) { return e && e.nome && e.notifica_email && e.email; });
+  if (!esps.length) {
+    container.innerHTML = '<p style="color:var(--text-muted);font-size:.85rem;margin:0">Nessun brand con email configurata.<br>Vai in Espositori → Notifiche partner.</p>';
+    return;
+  }
+  container.innerHTML = esps.map(function(e) {
+    return '<label style="display:flex;align-items:center;gap:8px;font-size:.9rem;cursor:pointer;">'
+      + '<input type="checkbox" class="report-brand-cb" value="' + e.nome + '" checked style="width:16px;height:16px;">'
+      + '<span>' + e.nome + '</span>'
+      + '<span style="color:var(--text-muted);font-size:.8rem">' + e.email + '</span>'
+      + '</label>';
+  }).join('');
+}
+
+async function inviaReportBrand() {
+  var url = gasUrl();
+  if (!url) { showToast('URL Backend non configurato', 'error'); return; }
+  var pin = lsGet('admin_pin') || '9991';
+  var periodo = document.getElementById('report-periodo').value;
+  var checks = document.querySelectorAll('.report-brand-cb:checked');
+  var brands = Array.from(checks).map(function(c) { return c.value; });
+  if (!brands.length) { showToast('Seleziona almeno un brand', 'error'); return; }
+  var btn = document.getElementById('btn-report-send');
+  btn.disabled = true;
+  btn.textContent = 'Invio in corso…';
+  try {
+    var r = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'inviaReport', pin: pin, periodo: periodo, brand: brands, notifiche_config: buildNotificheConfig() }),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    });
+    var j = await r.json();
+    if (j.status === 'ok') {
+      showToast('✓ Report inviato a ' + brands.length + ' brand', 'success', 4000);
+    } else {
+      showToast('Errore: ' + (j.messaggio || 'risposta non valida'), 'error', 5000);
+    }
+  } catch(e) {
+    showToast('Errore connessione — riprova', 'error', 4000);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '📤 Invia report';
+  }
+}
+
+function showOfflineError() {
+  // Overlay visibile al visitatore in caso di mancata connessione
+  var ov = document.createElement('div');
+  ov.id = 'overlay-offline';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(9,32,59,.92);text-align:center;padding:32px;gap:16px;';
+  ov.innerHTML = '<div style="font-size:2.5rem">⚠️</div>'
+    + '<div style="color:#fff;font-size:1.35rem;font-weight:700;line-height:1.3">Salvataggio non riuscito</div>'
+    + '<div style="color:#E6DABE;font-size:1.05rem;line-height:1.5">Connessione assente.<br>Contatta lo staff per completare la registrazione.</div>'
+    + '<button onclick="document.getElementById(\'overlay-offline\').remove()" '
+    + 'style="margin-top:8px;padding:12px 32px;background:#4AB8B0;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;">Riprova</button>';
+  document.body.appendChild(ov);
+}
+
+function showGrazie(nome) {
+  var ov = document.getElementById("overlay-grazie");
+  var titolo = document.getElementById("grazie-nome");
+  var cntd = document.getElementById("grazie-cntd");
+  titolo.textContent = nome ? "Grazie, " + nome + "!" : "Grazie!";
+  ov.classList.add("show");
+  var isKiosk = lsGet('kiosk_mode');
+  var actionsEl  = document.getElementById('grazie-actions');
+  var chiudiBtn  = document.getElementById('grazie-btn-chiudi');
+  var chiudiMsg  = document.getElementById('grazie-chiudi-msg');
+
+  // reset stato chiudi
+  if (chiudiBtn)  { chiudiBtn.style.display = 'block'; }
+  if (chiudiMsg)  { chiudiMsg.style.display = 'none'; }
+
+  // intervallo attivo — lo salviamo globalmente per poterlo cancellare
+  window._grazieIv = null;
+
+  if (isKiosk) {
+    // Kiosk: niente countdown, due bottoni
+    cntd.style.display = 'none';
+    if (actionsEl) { actionsEl.style.display = 'flex'; }
+    if (chiudiBtn) { chiudiBtn.style.display = 'block'; }
+  } else {
+    // Non-kiosk: countdown 30s poi tenta chiusura, altrimenti reset form
+    if (chiudiBtn) { chiudiBtn.style.display = 'block'; }
+    if (actionsEl) { actionsEl.style.display = 'flex'; }
+    cntd.style.display = '';
+    var sec = 30;
+    cntd.innerHTML = "Chiusura automatica tra <strong>" + sec + "</strong>s…";
+    window._grazieIv = setInterval(function() {
+      sec--;
+      if (sec <= 0) {
+        clearInterval(window._grazieIv);
+        window._grazieIv = null;
+        window.close();
+        setTimeout(function() {
+          if (!window.closed) {
+            ov.classList.remove("show");
+            if (actionsEl) actionsEl.style.display = 'none';
+            resetForm();
+          }
+        }, 400);
+      } else {
+        cntd.innerHTML = "Chiusura automatica tra <strong>" + sec + "</strong>s…";
+      }
+    }, 1000);
+  }
+}
+
+function graziNuovo() {
+  if (window._grazieIv) { clearInterval(window._grazieIv); window._grazieIv = null; }
+  var ov = document.getElementById("overlay-grazie");
+  var actionsEl = document.getElementById('grazie-actions');
+  ov.classList.remove("show");
+  if (actionsEl) actionsEl.style.display = 'none';
+  resetForm();
+}
+
+function grazieChiudi() {
+  var chiudiBtn = document.getElementById('grazie-btn-chiudi');
+  var chiudiMsg = document.getElementById('grazie-chiudi-msg');
+  window.close();
+  // Se window.close() non funziona (tab non aperta da script), mostra messaggio
+  setTimeout(function() {
+    if (!window.closed) {
+      if (chiudiBtn) chiudiBtn.style.display = 'none';
+      if (chiudiMsg) chiudiMsg.style.display = 'block';
+    }
+  }, 300);
 }
 
 function resetForm() {
@@ -2070,6 +2663,8 @@ function resetForm() {
     fctx.fillRect(0, 0, fcanvas.width, fcanvas.height);
     firmaVuota = true;
   }
+  // Reset sequential unlock
+  seqCheck();
   // Focus first espositore card
   document.querySelector('.esp-card')?.focus();
 }
@@ -2205,7 +2800,9 @@ function renderTable(rows) {
         ${rows.map(c => `
           <tr>
             <td class="td-muted" style="white-space:nowrap">${fmtDate(c.ts)}</td>
-            <td><strong>${esc(c.nome)} ${esc(c.cognome)}</strong><br><span class="td-muted">${[c.titolo,c.ruolo].filter(Boolean).map(esc).join(' · ')||''}</span></td>
+            <td><strong>${esc(c.nome)} ${esc(c.cognome)}</strong><br><span class="td-muted">${[c.titolo,c.ruolo].filter(Boolean).map(esc).join(' · ')||''}</span><br>${(c.consenso_marketing === true || c.consenso_marketing === 'Sì')
+              ? '<span class="badge-mkt-ok mkt-tip" data-tip="✓ Consenso marketing prestato — può essere contattato da ITA srl e dagli espositori selezionati per comunicazioni commerciali e promozionali (art. 6 co. 1 lett. a GDPR).">✓ mkt</span>'
+              : '<span class="badge-mkt-no mkt-tip" data-tip="✗ Consenso marketing non prestato — contattabile solo per il follow-up diretto del contatto di fiera (Consenso 1). Nessuna comunicazione commerciale o promozionale da parte degli espositori.">✗ mkt</span>'}</td>
             <td>${esc(c.azienda||'')}</td>
             <td class="td-muted" style="word-break:break-all">${esc(c.email||'')}</td>
             <td class="td-muted" style="white-space:nowrap">${esc(c.telefono||'')}</td>
@@ -2290,12 +2887,42 @@ function today() {
 // ══════════════════════════════════════════════════════════════════
 
 // ── Tab switching ──────────────────────────────────────────────────
+
+// ── Elimina contatti di test ───────────────────────────────────────
+async function eseguiEliminaTest() {
+  document.getElementById('elimina-test-confirm').hidden = true;
+  var resEl = document.getElementById('elimina-test-result');
+  resEl.textContent = 'Eliminazione in corso…';
+  var url = gasUrl();
+  var pin = lsGet('admin_pin') || '9991';
+  if (!url) { resEl.textContent = '✗ Backend non configurato.'; return; }
+  try {
+    var r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'eliminaTest', pin })
+    });
+    var j = await r.json();
+    if (j.ok) {
+      resEl.style.color = 'var(--teal-deep)';
+      resEl.textContent = '✓ Eliminati ' + j.eliminati + ' contatt' + (j.eliminati === 1 ? 'o' : 'i') + ' di test.';
+      loadAdminContatti();
+    } else {
+      resEl.style.color = 'var(--error)';
+      resEl.textContent = '✗ ' + (j.error || 'Errore sconosciuto');
+    }
+  } catch(e) {
+    resEl.style.color = 'var(--error)';
+    resEl.textContent = '✗ Errore di rete: ' + e.message;
+  }
+}
+
 function switchAdminTab(name) {
-  ['contatti','impostazioni','guida'].forEach(t => {
+  ['contatti','espositori','config','guida'].forEach(t => {
     document.getElementById('tab-' + t).hidden = (name !== t);
     document.getElementById('tab-btn-' + t).classList.toggle('active', name === t);
   });
-  if (name === 'impostazioni') loadSettings();
+  if (name === 'espositori' || name === 'config') loadSettings();
 }
 
 // ── Default exhibitor definitions ─────────────────────────────────
@@ -2327,7 +2954,7 @@ async function loadSettings() {
 
   // Render defaults immediately
   if (!settingsEspositori.length) settingsEspositori = getDefaultEspositori();
-  renderSettingsEspList();
+  renderSettingsEspList(); renderNotificheList();
 
   // Load event config
   try {
@@ -2335,6 +2962,8 @@ async function loadSettings() {
     const ev = (evDoc && evDoc.data && evDoc.data()) || {};
     document.getElementById('s-titolo').value = ev.titolo      || 'B-CAD 2026';
     document.getElementById('s-sub').value    = ev.sottotitolo || 'Raccolta Contatti';
+    if (ev.luogo !== undefined) document.getElementById('s-luogo').value = ev.luogo || '';
+    { const _lEl = document.getElementById('form-brand-luogo'); if (_lEl) { _lEl.textContent = ev.luogo||''; _lEl.hidden = !ev.luogo; } }
   } catch(e) { console.warn('config/evento:', e); }
 
   // Load privacy config
@@ -2353,7 +2982,7 @@ async function loadSettings() {
     const espData = espDoc && espDoc.data && espDoc.data();
     if (espData && espData.lista && espData.lista.length) {
       settingsEspositori = espData.lista;
-      renderSettingsEspList();
+      renderSettingsEspList(); renderNotificheList(); renderReportBrandList();
     }
   } catch(e) { console.warn('config/espositori:', e); }
 
@@ -2409,32 +3038,168 @@ function renderSettingsEspList() {
     return;
   }
   grid.innerHTML = settingsEspositori.map((e, i) => `
-    <div class="sec-card${e.visibile===false?' hidden-esp':''}" id="sec-card-${i}">
+    <div class="sec-card" id="sec-card-${i}" draggable="true" data-idx="${i}">
       <button class="btn-sec-remove" onclick="deleteEsp(${i})" title="Rimuovi">✕</button>
       <div class="sec-logo">${getLogoMarkup(e.id, e.colore, e.nome, e.logo)}</div>
       <span class="sec-name">${esc(e.nome)}</span>
       <span class="sec-desc" title="${esc(e.desc||'')}">${esc(e.desc||'')}</span>
-      <div class="sec-card-actions">
-        <button class="btn-sec-move" onclick="moveEsp(${i},-1)" ${i===0?'disabled':''}>←</button>
-        <button class="btn-sec-toggle ${e.visibile!==false?'on':'off'}" onclick="toggleEspVis(${i})">
-          ${e.visibile!==false?'On':'Off'}
-        </button>
-        <button class="btn-sec-move" onclick="moveEsp(${i},1)" ${i===settingsEspositori.length-1?'disabled':''}>→</button>
-      </div>
+      <div class="drag-handle" title="Trascina per riordinare">⠿</div>
     </div>`).join('');
+  initDragDrop(grid);
 }
 
-function toggleEspVis(idx) {
-  settingsEspositori[idx].visibile = settingsEspositori[idx].visibile === false ? true : false;
-  renderSettingsEspList();
+function renderNotificheList() {
+  var wrap = document.getElementById('notifiche-esp-list');
+  if (!wrap) return;
+  var attivi = settingsEspositori.filter(function(e){ return e.visibile !== false; });
+  if (!attivi.length) {
+    wrap.innerHTML = '<p style="font-size:.82rem;color:var(--text-muted)">Nessun espositore attivo.</p>';
+    return;
+  }
+  wrap.innerHTML = attivi.map(function(e) {
+    var idx = settingsEspositori.indexOf(e);
+    var on = !!(e.notifica_email && e.email);
+    var hasEmail = !!e.email;
+    return '<div class="notifica-row">'
+      + '<div class="notifica-brand">'
+      + '<span class="notifica-dot" style="background:' + (e.colore||'var(--teal)') + '"></span>'
+      + esc(e.nome)
+      + '</div>'
+      + '<input class="notifica-email-input" type="email" placeholder="email@partner.it"'
+      + ' value="' + esc(e.email||'') + '"'
+      + ' oninput="settingsEspositori['+idx+'].email=this.value;refreshNotificaSwitch('+idx+',this)">'
+      + '<div class="notifica-toggle" id="ntoggle-'+idx+'">'
+      + '<span class="notifica-switch' + (on?' on':'') + (hasEmail?'':' disabled') + '" id="nswitch-'+idx+'"'
+      + ' onclick="toggleNotificaSwitch('+idx+')" title="' + (hasEmail?'Attiva/disattiva notifica':'Inserisci prima un&#39;email') + '"></span>'
+      + '<span class="notifica-switch-label">' + (on?'Attivo':'Off') + '</span>'
+      + '</div>'
+      + '</div>';
+  }).join('');
 }
-function moveEsp(idx, dir) {
-  const n = idx + dir;
-  if (n < 0 || n >= settingsEspositori.length) return;
-  [settingsEspositori[idx], settingsEspositori[n]] = [settingsEspositori[n], settingsEspositori[idx]];
-  renderSettingsEspList();
+
+function refreshNotificaSwitch(idx, input) {
+  var e = settingsEspositori[idx];
+  var sw = document.getElementById('nswitch-'+idx);
+  if (!sw) return;
+  var hasEmail = !!input.value.trim();
+  if (!hasEmail) { e.notifica_email = false; sw.className = 'notifica-switch disabled'; sw.nextElementSibling.textContent = 'Off'; }
+  else { sw.classList.remove('disabled'); }
 }
-function deleteEsp(idx) { settingsEspositori.splice(idx,1); renderSettingsEspList(); renderCatalog(); }
+
+function toggleNotificaSwitch(idx) {
+  var e = settingsEspositori[idx];
+  if (!e.email) return;
+  e.notifica_email = !e.notifica_email;
+  var sw = document.getElementById('nswitch-'+idx);
+  if (!sw) return;
+  if (e.notifica_email) { sw.classList.add('on'); sw.nextElementSibling.textContent = 'Attivo'; }
+  else { sw.classList.remove('on'); sw.nextElementSibling.textContent = 'Off'; }
+}
+
+async function saveNotificheSettings() {
+  if (!db) { showToast('DB non disponibile', 'error'); return; }
+  await db.doc('config/espositori').set({ lista: settingsEspositori });
+
+  // Sincronizza PARTNER_CONFIG su GAS PropertiesService
+  var url = gasUrl();
+  if (url) {
+    try {
+      var cfg = {};
+      settingsEspositori.forEach(function(e) {
+        if (e.nome) cfg[e.nome] = { notifica_email: !!(e.notifica_email && e.email), email: e.email || '' };
+      });
+      var r = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'setPartnerConfig', pin: PIN, config: cfg }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      var j = await r.json();
+      if (j.status !== 'ok') console.warn('GAS PARTNER_CONFIG:', j);
+    } catch(err) { console.warn('GAS sync notifiche:', err); }
+  }
+
+  renderReportBrandList();
+  showToast('✓ Notifiche salvate');
+}
+
+
+// ── Drag & drop reorder for settings cards (HTML5 + touch) ──────────
+function initDragDrop(grid) {
+  let dragSrc = null;
+  // ── HTML5 Drag ──
+  grid.querySelectorAll('.sec-card').forEach(function(card) {
+    card.addEventListener('dragstart', function(e) {
+      dragSrc = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', this.dataset.idx);
+    });
+    card.addEventListener('dragend', function() {
+      this.classList.remove('dragging');
+      grid.querySelectorAll('.sec-card').forEach(function(c){ c.classList.remove('drag-over'); });
+    });
+    card.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      grid.querySelectorAll('.sec-card').forEach(function(c){ c.classList.remove('drag-over'); });
+      if (this !== dragSrc) this.classList.add('drag-over');
+      return false;
+    });
+    card.addEventListener('drop', function(e) {
+      e.preventDefault();
+      if (!dragSrc || dragSrc === this) return false;
+      var fromIdx = parseInt(dragSrc.dataset.idx);
+      var toIdx   = parseInt(this.dataset.idx);
+      var moved = settingsEspositori.splice(fromIdx, 1)[0];
+      settingsEspositori.splice(toIdx, 0, moved);
+      renderSettingsEspList(); renderNotificheList(); renderReportBrandList();
+      return false;
+    });
+  });
+  // ── Touch (tablet) ──
+  var touchDragEl = null, touchClone = null, touchFromIdx = -1;
+  grid.querySelectorAll('.sec-card').forEach(function(card) {
+    card.addEventListener('touchstart', function(e) {
+      touchFromIdx = parseInt(this.dataset.idx);
+      touchDragEl  = this;
+      var r = this.getBoundingClientRect();
+      touchClone = this.cloneNode(true);
+      touchClone.style.cssText = 'position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;opacity:.7;pointer-events:none;z-index:9999;border:2px solid var(--teal);border-radius:10px;background:var(--surface);transition:none;';
+      document.body.appendChild(touchClone);
+      this.style.opacity = '.3';
+    }, {passive: true});
+    card.addEventListener('touchmove', function(e) {
+      if (!touchClone) return;
+      e.preventDefault();
+      var t = e.touches[0];
+      touchClone.style.left = (t.clientX - touchClone.offsetWidth/2)  + 'px';
+      touchClone.style.top  = (t.clientY - touchClone.offsetHeight/2) + 'px';
+      touchClone.style.display = 'none';
+      var el = document.elementFromPoint(t.clientX, t.clientY);
+      touchClone.style.display = '';
+      var target = el && el.closest('.sec-card');
+      grid.querySelectorAll('.sec-card').forEach(function(c){ c.classList.remove('drag-over'); });
+      if (target && target !== touchDragEl) target.classList.add('drag-over');
+    }, {passive: false});
+    card.addEventListener('touchend', function(e) {
+      if (!touchClone) return;
+      if (touchDragEl) touchDragEl.style.opacity = '';
+      touchClone.remove(); touchClone = null;
+      grid.querySelectorAll('.sec-card').forEach(function(c){ c.classList.remove('drag-over'); });
+      var t = e.changedTouches[0];
+      var el = document.elementFromPoint(t.clientX, t.clientY);
+      var target = el && el.closest('.sec-card');
+      if (target && target !== touchDragEl) {
+        var toIdx = parseInt(target.dataset.idx);
+        var moved = settingsEspositori.splice(touchFromIdx, 1)[0];
+        settingsEspositori.splice(toIdx, 0, moved);
+        renderSettingsEspList(); renderNotificheList(); renderReportBrandList();
+      }
+      touchDragEl = null; touchFromIdx = -1;
+    }, {passive: true});
+  });
+}
+function deleteEsp(idx) { settingsEspositori.splice(idx,1); renderSettingsEspList(); renderNotificheList(); renderReportBrandList(); renderCatalog(); }
 
 // ── Catalog functions ──────────────────────────────────────────────
 let catalogList = [];
@@ -2666,7 +3431,7 @@ function addFromCatalog(catId) {
   };
   if (item.logo) entry.logo = item.logo;
   settingsEspositori.push(entry);
-  renderSettingsEspList();
+  renderSettingsEspList(); renderNotificheList(); renderReportBrandList();
   renderCatalog();
 }
 
@@ -2735,10 +3500,13 @@ async function saveEventoSettings() {
   if (!db) { showToast('DB non disponibile', 'error'); return; }
   const titolo      = document.getElementById('s-titolo').value.trim() || 'B-CAD 2026';
   const sottotitolo = document.getElementById('s-sub').value.trim()    || 'Raccolta Contatti';
-  await db.doc('config/evento').set({ titolo, sottotitolo });
+  const luogo       = document.getElementById('s-luogo').value.trim();
+  await db.doc('config/evento').set({ titolo, sottotitolo, luogo });
   document.getElementById('form-brand-main').textContent  = titolo;
   document.getElementById('admin-brand-main').textContent = titolo;
   document.getElementById('form-brand-sub').textContent   = sottotitolo;
+  const _lEl = document.getElementById('form-brand-luogo');
+  if (_lEl) { _lEl.textContent = luogo; _lEl.hidden = !luogo; }
   showToast('✓ Evento aggiornato');
 }
 
@@ -2823,6 +3591,7 @@ async function saveToArchive() {
   const sottotitoloEvento = document.getElementById('s-sub').value.trim();
   await db.collection('archivio').add({
     nome, titoloEvento, sottotitoloEvento,
+    luogoEvento: document.getElementById('s-luogo').value.trim(),
     lista: JSON.parse(JSON.stringify(settingsEspositori)),
     savedAt: Date.now()
   });
@@ -2879,8 +3648,9 @@ async function loadFromArchive(id) {
   if (!cfg) return;
   document.getElementById('s-titolo').value = cfg.titoloEvento||'';
   document.getElementById('s-sub').value    = cfg.sottotitoloEvento||'';
+  document.getElementById('s-luogo').value = cfg.luogoEvento||'';
   settingsEspositori = JSON.parse(JSON.stringify(cfg.lista||[]));
-  renderSettingsEspList();
+  renderSettingsEspList(); renderNotificheList(); renderReportBrandList();
   if (db) {
     await Promise.all([
       db.doc('config/evento').set({titolo:cfg.titoloEvento, sottotitolo:cfg.sottotitoloEvento}),
@@ -2892,6 +3662,7 @@ async function loadFromArchive(id) {
   document.getElementById('form-brand-main').textContent  = cfg.titoloEvento||'B-CAD 2026';
   document.getElementById('admin-brand-main').textContent = cfg.titoloEvento||'B-CAD 2026';
   document.getElementById('form-brand-sub').textContent   = cfg.sottotitoloEvento||'Raccolta Contatti';
+  { const _lEl=document.getElementById('form-brand-luogo'); if(_lEl){_lEl.textContent=cfg.luogoEvento||'';_lEl.hidden=!cfg.luogoEvento;} }
   showToast(`✓ Configurazione "${cfg.nome}" caricata`);
   renderArchive();
 }
@@ -2917,6 +3688,7 @@ async function applyStoredConfig() {
       if (ev.titolo)      { document.getElementById('form-brand-main').textContent  = ev.titolo;
                             document.getElementById('admin-brand-main').textContent = ev.titolo; }
       if (ev.sottotitolo)   document.getElementById('form-brand-sub').textContent   = ev.sottotitolo;
+      if (ev.luogo !== undefined) { const _lEl=document.getElementById('form-brand-luogo'); if(_lEl){_lEl.textContent=ev.luogo||'';_lEl.hidden=!ev.luogo;} }
     }
     const espData = espDoc.data();
     if (espData && espData.lista && espData.lista.length) {
@@ -2940,7 +3712,62 @@ let db, downloads;
 const LS_NS = 'bcad26_';
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(LS_NS + k)); } catch(e) { return null; } }
 function lsSet(k, v) { try { localStorage.setItem(LS_NS + k, JSON.stringify(v)); } catch(e) {} }
-function gasUrl() { return lsGet('gas_url') || ''; }
+
+// — migrazione automatica URL GAS vecchio→nuovo (v14) —
+(function() {
+  var stored = localStorage.getItem('gas_url') || '';
+  if (stored.indexOf('AKfycbwmnai0L4XqOJXMdh4gx93KdmrQh8MuUkulWMOpkMFZaEF3j6apD5PwZyP05Moh2mAy') !== -1) {
+    localStorage.setItem('gas_url', 'https://script.google.com/macros/s/AKfycbzBWE7ndFXZCU6dCJzMs6q1rzf5KhLyhkA2lkUrPjUhI7JTYMhIv-VZwUtESxlj5WN/exec');
+    console.log('[B-CAD] URL GAS migrato automaticamente a v14');
+  }
+})();
+function gasUrl() { return lsGet('gas_url') || 'https://script.google.com/macros/s/AKfycbzBWE7ndFXZCU6dCJzMs6q1rzf5KhLyhkA2lkUrPjUhI7JTYMhIv-VZwUtESxlj5WN/exec'; }
+
+// ── Offline queue ────────────────────────────────────────────────────
+function updatePendingBadge() {
+  var pending = lsGet('pending_contacts') || [];
+  var badge = document.getElementById('pending-badge');
+  var cnt   = document.getElementById('pending-count');
+  if (!badge) return;
+  if (pending.length > 0) {
+    if (cnt) cnt.textContent = pending.length;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+async function flushPendingContacts() {
+  var pending = lsGet('pending_contacts') || [];
+  if (!pending.length) return;
+  var url = gasUrl();
+  if (!url) return;
+  var remaining = [];
+  var sent = 0;
+  for (var i = 0; i < pending.length; i++) {
+    var payload = pending[i];
+    try {
+      var r = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      var j = await r.json();
+      if (j.status !== 'ok') { remaining.push(payload); }
+      else { sent++; }
+    } catch(e) { remaining.push(payload); }
+  }
+  lsSet('pending_contacts', remaining);
+  updatePendingBadge();
+  if (sent > 0) showToast('\u2713 ' + sent + ' contatto/i in coda sincronizzato/i', 'success', 3500);
+}
+function buildNotificheConfig() {
+  var cfg = {};
+  (typeof settingsEspositori !== 'undefined' ? settingsEspositori : []).forEach(function(e) {
+    if (e && e.nome) cfg[e.nome] = { notifica_email: !!(e.notifica_email && e.email), email: e.email || '' };
+  });
+  return cfg;
+}
 
 // Converte timestamp GAS "dd/MM/yyyy HH:mm:ss" → numero
 function normalizeContact(c) {
@@ -2974,13 +3801,26 @@ db = {
         async add(data) {
           const url = gasUrl();
           if (!url) throw new Error('URL Backend non configurato. Vai in Impostazioni → Backend.');
-          const r = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ ...data, fonte: data.fonte || 'Staff' }),
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-          });
+          const payload = { ...data, fonte: data.fonte || 'Staff', notifiche_config: {} }; // notifiche brand gestite manualmente via report
+          let r;
+          try {
+            r = await fetch(url, {
+              method: 'POST',
+              body: JSON.stringify(payload),
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            });
+          } catch (netErr) {
+            const pending = lsGet('pending_contacts') || [];
+            pending.push({ ...payload, _queued: Date.now() });
+            lsSet('pending_contacts', pending);
+            updatePendingBadge();
+            const err = new Error('Connessione assente');
+            err.code = 'OFFLINE_QUEUED';
+            throw err;
+          }
           const j = await r.json();
           if (j.status !== 'ok') throw new Error(j.messaggio || 'Errore server');
+          flushPendingContacts();
         },
         onSnapshot(cb, errCb) {
           const doFetch = () => {
@@ -3156,6 +3996,14 @@ async function testBackendConnection() {
     }
     applyStoredConfig();
     startStatsListener();
+    renderReportBrandList();
+    seqCheck(); // blocca campi successivi al caricamento
+    // Warm-up GAS: chiamata silenziosa per svegliare il backend prima del primo visitatore
+    (function warmupGas() {
+      var url = gasUrl();
+      if (!url) return;
+      fetch(url + '?action=ping').catch(function(){});
+    })();
   } catch(err) {
     console.error('Init error', err);
   }
