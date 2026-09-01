@@ -322,7 +322,10 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
+    transition: opacity .3s;
   }
+  /* Nasconde visivamente ma MANTIENE lo spazio nel layout (evita layout shift) */
+  .stats-bar.empty { opacity: 0; pointer-events: none; min-height: 0; padding: 0; margin-bottom: 0; border: none; }
   .stats-total {
     font-family: 'Caladea', Georgia, serif;
     font-size: .9rem;
@@ -1507,7 +1510,7 @@
     </div>
 
     <!-- Contatore contatti realtime -->
-    <div class="stats-bar" id="stats-bar" hidden>
+    <div class="stats-bar empty" id="stats-bar">
       <span class="stats-total" id="stats-total">0 contatti</span>
       <div class="stats-esp-list" id="stats-esp-list"></div>
     </div>
@@ -3281,8 +3284,8 @@ function startStatsListener() {
 
 function renderStatsBar(docs) {
   const bar = document.getElementById('stats-bar');
-  if (!docs.length) { bar.hidden = true; return; }
-  bar.hidden = false;
+  if (!docs.length) { bar.classList.add('empty'); return; }
+  bar.classList.remove('empty');
 
   const total = docs.length;
   document.getElementById('stats-total').textContent =
