@@ -2922,7 +2922,7 @@ async function eseguiEliminaTest() {
     if (j.ok) {
       resEl.style.color = 'var(--teal-deep)';
       resEl.textContent = '✓ Eliminati ' + j.eliminati + ' contatt' + (j.eliminati === 1 ? 'o' : 'i') + ' di test.';
-      loadAdminContatti();
+      loadContacts();
     } else {
       resEl.style.color = 'var(--error)';
       resEl.textContent = '✗ ' + (j.error || 'Errore sconosciuto');
@@ -3733,9 +3733,9 @@ function lsSet(k, v) { try { localStorage.setItem(LS_NS + k, JSON.stringify(v));
 
 // — migrazione automatica URL GAS vecchio→nuovo (v14) —
 (function() {
-  var stored = localStorage.getItem('gas_url') || '';
+  var stored = lsGet('gas_url') || '';
   if (stored.indexOf('AKfycbwmnai0L4XqOJXMdh4gx93KdmrQh8MuUkulWMOpkMFZaEF3j6apD5PwZyP05Moh2mAy') !== -1) {
-    localStorage.setItem('gas_url', 'https://script.google.com/macros/s/AKfycbycwzVJ3eBjB8gSiC8H_UMP09YM2RtPvn5bY6IrdS831uJ4349dbUtwiwb2q204wlfA/exec');
+    lsSet('gas_url', 'https://script.google.com/macros/s/AKfycbycwzVJ3eBjB8gSiC8H_UMP09YM2RtPvn5bY6IrdS831uJ4349dbUtwiwb2q204wlfA/exec');
     console.log('[B-CAD] URL GAS migrato automaticamente a v14');
   }
 })();
