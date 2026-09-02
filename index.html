@@ -63,6 +63,7 @@
   /* ─── Reset / base ─── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+  html { overscroll-behavior: none; }
   body {
     font-family: 'Carlito', Arial, sans-serif;
     background: var(--bg);
@@ -2327,10 +2328,19 @@ function showAdmin() {
     fcanvas.addEventListener('mouseleave', function(){ drawing=false; });
     fcanvas.addEventListener('touchstart', function(e){ e.preventDefault(); drawing=true; var p=getPos(e); fctx.beginPath(); fctx.moveTo(p.x,p.y); firmaVuota=false; document.getElementById('err-firma').style.display='none'; }, {passive:false});
     fcanvas.addEventListener('touchmove',  function(e){ e.preventDefault(); if(!drawing) return; var p=getPos(e); fctx.lineTo(p.x,p.y); fctx.stroke(); }, {passive:false});
-    fcanvas.addEventListener('touchend',   function(e){ drawing=false; document.body.style.overflow=''; document.body.style.position=''; });
-    fcanvas.addEventListener('touchcancel', function(){ drawing=false; document.body.style.overflow=''; document.body.style.position=''; });
-    // Blocca scroll body su TUTTI i browser mobile durante la firma
-    fcanvas.addEventListener('touchstart', function(){ document.body.style.overflow='hidden'; document.body.style.position='relative'; }, {passive:true});
+    fcanvas.addEventListener('touchend',   function(e){ drawing=false; document.documentElement.style.touchAction=''; document.documentElement.style.overscrollBehavior=''; });
+    fcanvas.addEventListener('touchcancel', function(){ drawing=false; document.documentElement.style.touchAction=''; document.documentElement.style.overscrollBehavior=''; });
+    // Blocca scroll html element durante la firma (più affidabile di body.overflow su iOS)
+    fcanvas.addEventListener('touchstart', function(){ document.documentElement.style.touchAction='none'; document.documentElement.style.overscrollBehavior='none'; }, {passive:true});
+    // Document-level: blocca scroll durante disegno su QUALSIASI browser/dispositivo
+    document.addEventListener('touchmove', function(e) {
+      if (!drawing) return;
+      var el = e.target;
+      while (el) {
+        if (el === firmBox || el === fcanvas) { e.preventDefault(); return; }
+        el = el.parentElement;
+      }
+    }, {passive: false});
     document.getElementById('firma-clear').addEventListener('click', function() {
       fctx.fillStyle='#ffffff'; fctx.fillRect(0,0,fcanvas.width,fcanvas.height); firmaVuota=true;
     });
@@ -2498,9 +2508,9 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
     document.getElementById('err-firma').style.display = 'none';
   }
 
-  // Ripristino body scroll (cleanup universale post-firma)
-  document.body.style.overflow = '';
-  document.body.style.position = '';
+  // Ripristino scroll html (cleanup universale post-firma)
+  document.documentElement.style.touchAction = '';
+  document.documentElement.style.overscrollBehavior = '';
 
   if (!valid) return;
 
