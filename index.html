@@ -2666,19 +2666,18 @@ function showGrazie(nome) {
   var cntd = document.getElementById("grazie-cntd");
   titolo.textContent = nome ? "Grazie, " + nome + "!" : "Grazie!";
   ov.classList.add("show");
-  var isKiosk = lsGet('kiosk_mode');
+  var isKiosk = (window._bcadKiosk === true) || !!lsGet('kiosk_mode');
   var actionsEl  = document.getElementById('grazie-actions');
   var chiudiBtn  = document.getElementById('grazie-btn-chiudi');
   var chiudiMsg  = document.getElementById('grazie-chiudi-msg');
 
-  // reset stato chiudi
-  if (chiudiBtn)  { chiudiBtn.style.display = 'block'; }
+  // reset stato chiudi (solo se NON solo — evita flash del pulsante)
   if (chiudiMsg)  { chiudiMsg.style.display = 'none'; }
 
   // intervallo attivo — lo salviamo globalmente per poterlo cancellare
   window._grazieIv = null;
 
-  var isSolo  = lsGet('solo_mode');
+  var isSolo  = (window._bcadSolo === true) || !!lsGet('solo_mode');
 
   if (isSolo) {
     // Solo (QR visitatori): countdown 25s poi schermata chiusura QR, no "Nuovo contatto"
@@ -4141,6 +4140,8 @@ async function testBackendConnection() {
   if (!hash.startsWith('#cfg=')) {
     // Apertura diretta (link ITA) → reset kiosk, accesso completo
     lsSet('kiosk_mode', false);
+    window._bcadKiosk = false;
+    window._bcadSolo  = false;
     return;
   }
   try {
@@ -4153,7 +4154,10 @@ async function testBackendConnection() {
     history.replaceState(null, '', location.pathname + location.search);
     if (cfg.mode === 'kiosk') lsSet('kiosk_mode', true);
     lsSet('solo_mode', cfg.solo === true);
-    console.log('[bcad] config applicata da URL, mode:', cfg.mode || 'full');
+    // Variabili globali sessione (backup indipendente da localStorage)
+    window._bcadKiosk = (cfg.mode === 'kiosk');
+    window._bcadSolo  = (cfg.solo === true);
+    console.log('[bcad] config applicata da URL, mode:', cfg.mode || 'full', 'solo:', window._bcadSolo);
   } catch(e) { console.warn('[bcad] URL config error', e); }
 })();
 
@@ -4162,14 +4166,14 @@ async function testBackendConnection() {
     const url = gasUrl();
     const warn = document.getElementById('db-warn');
     if (warn) warn.style.display = url ? 'none' : 'block';
-    if (lsGet('kiosk_mode')) {
+    if ((window._bcadKiosk === true) || lsGet('kiosk_mode')) {
       var btnAdmin = document.getElementById('btn-open-admin');
       if (btnAdmin) btnAdmin.style.display = 'none';
       if (warn) warn.style.display = 'none';
       document.title = 'B-CAD 2026 — Form pubblico';
     }
     // Solo mode: se il visitatore torna indietro dopo aver già compilato, mostra chiusura
-    if (lsGet('solo_mode')) {
+    if ((window._bcadSolo === true) || lsGet('solo_mode')) {
       try {
         if (sessionStorage.getItem('bcad26_solo_done')) {
           chiudiSessioneQR();
