@@ -1951,10 +1951,20 @@
               <input type="text" id="s-gas-pin" placeholder="9991" maxlength="10">
             </div>
           </div>
+          <div class="settings-row" style="margin-top:10px">
+            <div class="settings-field" style="flex:1">
+              <label>URL pubblico app (GitHub Pages)</label>
+              <input type="url" id="s-app-public-url" placeholder="https://ivaldo1997-gestionale.github.io/bcad-2026/" style="font-size:.78rem">
+              <div style="font-size:.75rem;color:var(--text-muted);margin-top:4px;line-height:1.4">
+                &#8505;&#65039; Inserisci l'indirizzo web pubblico dell'app (es. GitHub Pages). I pulsanti <strong>Genera link staff</strong> e <strong>Genera link QR visitatori</strong> useranno questo URL al posto del percorso locale del file. Lascia vuoto per usare l'indirizzo corrente del browser.
+              </div>
+            </div>
+          </div>
           <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
             <button class="btn-settings" onclick="saveBackendSettings()">💾 Salva configurazione</button>
             <button class="btn-settings secondary" onclick="testBackendConnection()">🔌 Testa connessione</button>
-            <button class="btn-settings secondary" onclick="generaLinkConfig()" title="Copia un link con tutta la configurazione">📋 Genera link configurato</button>
+            <button class="btn-settings secondary" onclick="generaLinkConfig()" title="Copia un link con tutta la configurazione">📋 Genera link staff</button>
+            <button class="btn-settings secondary" onclick="generaLinkQR()" title="Copia link QR per i visitatori (modalità solo)">📲 Genera link QR visitatori</button>
           </div>
           <div id="backend-status" style="font-size:.79rem;margin-top:8px;min-height:18px"></div>
         </div>
@@ -2041,10 +2051,10 @@
         <div class="settings-section" style="margin-bottom:20px">
           <h3>🔗 Generatore QR Code</h3>
           <p style="font-size:.82rem;color:var(--text-muted);margin:0 0 12px;line-height:1.5">
-            Incolla l'URL dell'app (es. pagina GitHub Pages o link condivisibile) e genera il QR da stampare al banco.
+            Incolla il <strong>link QR visitatori</strong> (generato al passo 7) e crea il QR da stampare al banco. Non usare l'URL generico dell'app — il link QR include già tutta la configurazione.
           </p>
           <div class="qr-gen-row">
-            <input type="url" id="qr-url-input" placeholder="https://itasrl.github.io/bcad-app/">
+            <input type="url" id="qr-url-input" placeholder="https://ivaldo1997-gestionale.github.io/bcad-2026/#cfg=...">
             <button class="btn-settings" onclick="generateQr()">Genera QR</button>
           </div>
           <div id="qr-output-wrap" hidden>
@@ -2066,42 +2076,49 @@
             <div class="guide-step-num">1</div>
             <div class="guide-step-body">
               <div class="guide-step-title">Duplica il foglio Google</div>
-              <div class="guide-step-desc">Apri il foglio B-CAD su Google Drive → <em>File → Crea una copia</em>. Copia il nuovo ID dal URL: la parte tra <code>/d/</code> e <code>/edit</code>.</div>
+              <div class="guide-step-desc">Apri il foglio B-CAD su Google Drive → <em>File → Crea una copia</em>. Copia il nuovo ID dall'URL: la parte tra <code>/d/</code> e <code>/edit</code>.</div>
             </div>
           </div>
           <div class="guide-step">
             <div class="guide-step-num">2</div>
             <div class="guide-step-body">
               <div class="guide-step-title">Aggiorna il backend GAS</div>
-              <div class="guide-step-desc">Apri <code>bcad-backend-v2.gs</code> su Google Apps Script → aggiorna la variabile <code>SHEET_ID</code> con il nuovo ID → salva → <em>Deploy → Gestisci deployment → ✏️ → Nuova versione → Esegui</em>. L'URL rimane lo stesso.</div>
+              <div class="guide-step-desc">Apri <code>bcad-backend-v2.gs</code> su Google Apps Script → aggiorna la variabile <code>SHEET_ID</code> con il nuovo ID → salva → <em>Deploy → Gestisci deployment → ✏️ → Nuova versione → Esegui</em>. L'URL del web app rimane invariato.</div>
             </div>
           </div>
           <div class="guide-step">
             <div class="guide-step-num">3</div>
             <div class="guide-step-body">
-              <div class="guide-step-title">Incolla l'URL nelle Impostazioni</div>
-              <div class="guide-step-desc">Pannello ITA → ⚙ Impostazioni → 🔗 Backend → incolla l'URL del web app → <em>Salva configurazione</em> → <em>Testa connessione</em>.</div>
+              <div class="guide-step-title">Carica l'app su GitHub Pages</div>
+              <div class="guide-step-desc">Carica il file <code>index.html</code> nel repository GitHub → push. L'app sarà disponibile online all'indirizzo pubblico del repository. Per trovare l'URL esatto: apri il repository su GitHub → <em>Settings → Pages</em> → l'indirizzo è mostrato lì con un link diretto.</div>
             </div>
           </div>
           <div class="guide-step">
             <div class="guide-step-num">4</div>
             <div class="guide-step-body">
-              <div class="guide-step-title">Configura titolo ed espositori</div>
-              <div class="guide-step-desc">Impostazioni → 🗓 Evento: aggiorna titolo e sottotitolo. Verifica gli espositori attivi. Salva tutto.</div>
+              <div class="guide-step-title">Incolla l'URL GAS e l'URL pubblico app nelle Impostazioni</div>
+              <div class="guide-step-desc">Pannello ITA → ⚙ Config → Backend → incolla l'URL del web app GAS → <em>Testa connessione</em>. Poi incolla l'URL GitHub Pages nel campo <strong>URL pubblico app</strong> (es. <code>https://utente.github.io/nome-repo/</code>). Salva. Questo URL verrà usato da tutti i link generati: se lasci il campo vuoto, i link useranno l'indirizzo del browser da cui stai operando.</div>
             </div>
           </div>
           <div class="guide-step">
             <div class="guide-step-num">5</div>
             <div class="guide-step-body">
-              <div class="guide-step-title">Genera link configurato e distribuisci ai tablet</div>
-              <div class="guide-step-desc">Impostazioni → 🔗 Backend → <strong>📋 Genera link configurato</strong>. Il link include GAS URL, evento, espositori e privacy. Invialo ai tablet dello staff: chi lo apre riceve automaticamente tutta la configurazione — nessuna impostazione manuale.</div>
+              <div class="guide-step-title">Configura evento ed espositori</div>
+              <div class="guide-step-desc">Config → 🗓 Evento: aggiorna titolo, sottotitolo e sede. Config → 🏢 Espositori: verifica quali sono attivi e l'ordine di visualizzazione (drag &amp; drop). Salva tutto.</div>
             </div>
           </div>
           <div class="guide-step">
             <div class="guide-step-num">6</div>
             <div class="guide-step-body">
-              <div class="guide-step-title">Genera e stampa il QR</div>
-              <div class="guide-step-desc">Usa il Generatore QR qui sopra con l'URL dell'app. Scarica il PNG e stampalo per il banco.</div>
+              <div class="guide-step-title">Genera il link staff e distribuiscilo ai tablet</div>
+              <div class="guide-step-desc">Config → Backend → <strong>📋 Genera link staff</strong>: copia il link negli appunti e invialo via WhatsApp o email ai tablet dello staff. Chi apre quel link riceve automaticamente tutta la configurazione (GAS URL, evento, espositori, privacy). Sul tablet si apre direttamente il form in modalità kiosk, senza accesso al pannello ITA.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">7</div>
+            <div class="guide-step-body">
+              <div class="guide-step-title">Genera il link QR visitatori e crea il QR</div>
+              <div class="guide-step-desc">Config → Backend → <strong>📲 Genera link QR visitatori</strong>: copia il link. Questo link è diverso da quello staff — attiva la <em>modalità singola</em>: il visitatore compila una sola volta, poi la schermata si blocca e non è possibile tornare indietro con il tasto Back. Incolla il link nel Generatore QR qui sopra, scarica il PNG e stampalo per esporlo al banco.</div>
             </div>
           </div>
         </div><!-- /fase 1 -->
@@ -2109,24 +2126,31 @@
         <div class="guide-phase">
           <div class="guide-phase-label">📱 Durante la fiera</div>
           <div class="guide-step">
-            <div class="guide-step-num">7</div>
-            <div class="guide-step-body">
-              <div class="guide-step-title">Staff — tablet al banco</div>
-              <div class="guide-step-desc">Apri l'app sul tablet. Ogni contatto viene registrato dallo staff: seleziona espositori, compila i dati, ottieni la firma.</div>
-            </div>
-          </div>
-          <div class="guide-step">
             <div class="guide-step-num">8</div>
             <div class="guide-step-body">
-              <div class="guide-step-title">Visitatori — QR autonomo</div>
-              <div class="guide-step-desc">Il visitatore scansiona il QR con il proprio telefono e compila in autonomia. I dati arrivano nel foglio Google insieme a quelli dello staff.</div>
+              <div class="guide-step-title">Staff — tablet al banco (modalità kiosk)</div>
+              <div class="guide-step-desc">Lo staff apre il link staff ricevuto. Il tablet rimane sul form: dopo ogni salvataggio appare un pulsante <em>Nuovo contatto</em> per ricominciare subito. Il pannello ITA non è visibile in questa modalità — per accedervi basta aprire l'app senza link configurato.</div>
             </div>
           </div>
           <div class="guide-step">
             <div class="guide-step-num">9</div>
             <div class="guide-step-body">
+              <div class="guide-step-title">Visitatori — QR autonomo (modalità singola)</div>
+              <div class="guide-step-desc">Il visitatore scansiona il QR con il proprio telefono: compila il form, invia, riceve un'email di conferma. Dopo l'invio la schermata si chiude automaticamente e il tasto Back del telefono non riporta al form — ogni visitatore compila una sola volta. I dati arrivano nel foglio Google in tempo reale.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">10</div>
+            <div class="guide-step-body">
               <div class="guide-step-title">Consulta la lista in tempo reale</div>
-              <div class="guide-step-desc">Tab <strong>Contatti</strong>: lista aggiornata ogni 30 secondi. Filtra per espositore o per giornata.</div>
+              <div class="guide-step-desc">Tab <strong>Contatti</strong>: lista aggiornata ogni 30 secondi. Filtra per espositore o per giornata (Giorno 1 / 2 / 3). Il badge <span style="color:#2d7a2d;font-weight:600">✓ mkt</span> indica consenso marketing, <span style="color:#b00;font-weight:600">✗ mkt</span> solo GDPR base.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">11</div>
+            <div class="guide-step-body">
+              <div class="guide-step-title">Problemi di rete</div>
+              <div class="guide-step-desc">Se la connessione cade durante un salvataggio, il contatto viene conservato in locale con un avviso sullo schermo. Appena la rete torna, i contatti in attesa vengono inviati automaticamente. Il badge arancione nel pannello ITA segnala quanti contatti sono ancora in coda.</div>
             </div>
           </div>
         </div><!-- /fase 2 -->
@@ -2134,24 +2158,31 @@
         <div class="guide-phase">
           <div class="guide-phase-label">📥 Fine fiera</div>
           <div class="guide-step">
-            <div class="guide-step-num">10</div>
-            <div class="guide-step-body">
-              <div class="guide-step-title">Esporta per espositore</div>
-              <div class="guide-step-desc">Filtra per espositore → <em>Esporta filtrati</em>: CSV pronto da inviare a ciascun partner. Oppure apri il foglio Google direttamente.</div>
-            </div>
-          </div>
-          <div class="guide-step">
-            <div class="guide-step-num">11</div>
-            <div class="guide-step-body">
-              <div class="guide-step-title">Esporta l'archivio completo</div>
-              <div class="guide-step-desc"><em>Esporta tutti</em> genera un CSV integrale con ogni contatto raccolta da staff e visitatori.</div>
-            </div>
-          </div>
-          <div class="guide-step">
             <div class="guide-step-num">12</div>
             <div class="guide-step-body">
+              <div class="guide-step-title">Invia report ai brand</div>
+              <div class="guide-step-desc">Tab <strong>Espositori</strong> → sezione <em>📧 Invia report ai brand</em>: seleziona il periodo (Giorno 1 / 2 / 3 o intera fiera) e i brand da notificare. Ogni brand riceve via email la lista dei propri contatti con nome, azienda, ruolo e consenso marketing.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">13</div>
+            <div class="guide-step-body">
+              <div class="guide-step-title">Esporta per espositore</div>
+              <div class="guide-step-desc">Tab <strong>Contatti</strong> → filtra per espositore → <em>Esporta filtrati</em>: CSV pronto da inviare al partner. Oppure apri il foglio Google direttamente per elaborazioni avanzate.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">14</div>
+            <div class="guide-step-body">
+              <div class="guide-step-title">Esporta l'archivio completo</div>
+              <div class="guide-step-desc"><em>Esporta tutti</em> genera un CSV integrale con ogni contatto raccolto da staff e visitatori, tutte le giornate.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">15</div>
+            <div class="guide-step-body">
               <div class="guide-step-title">Prossima fiera</div>
-              <div class="guide-step-desc">Ripeti dal passo 1: duplica il foglio, aggiorna SHEET_ID nel GAS, re-deploy. L'app e il QR restano identici — cambiano solo i dati nel backend.</div>
+              <div class="guide-step-desc">Ripeti dal passo 1: duplica il foglio Google, aggiorna <code>SHEET_ID</code> nel GAS e fai il re-deploy, carica il nuovo <code>index.html</code> su GitHub Pages. Al passo 4 inserisci il nuovo URL GAS e aggiorna il campo <strong>URL pubblico app</strong> se l'indirizzo GitHub è cambiato. L'app non cambia — cambiano solo i dati nel backend.</div>
             </div>
           </div>
         </div><!-- /fase 3 -->
@@ -2159,7 +2190,7 @@
         </div><!-- /guide-phases-grid -->
 
         <div class="guide-footer">
-          <strong>Paradigma:</strong> l'app è il contenitore (non cambia mai), il foglio Google è il serbatoio (uno per fiera), il link configurato distribuisce le impostazioni ai tablet. Stesso QR, dati sempre freschi.
+          <strong>Paradigma:</strong> l'app è il contenitore (non cambia mai), il foglio Google è il serbatoio (uno per fiera), il link staff distribuisce la configurazione ai tablet, il link QR porta i visitatori direttamente al form in modalità singola. L'URL pubblico configurato in Backend garantisce che tutti i link generati puntino sempre all'indirizzo corretto, anche quando si lavora in locale.
         </div>
 
       </div><!-- /settings-guide -->
@@ -2177,7 +2208,7 @@
   <div class="grazie-check">✓</div>
   <div class="grazie-title" id="grazie-nome">Grazie!</div>
   <div class="grazie-sub">I tuoi dati sono stati registrati.<br>Un nostro esperto ti contatterà presto.</div>
-  <div class="grazie-countdown" id="grazie-cntd">Nuova schermata tra <strong>8</strong>s…</div>
+  <div class="grazie-countdown" id="grazie-cntd">Chiusura tra <strong>25</strong>s…</div>
   <div class="grazie-actions" id="grazie-actions" style="display:none;flex-direction:column;align-items:center;gap:12px;margin-top:20px;">
     <button id="grazie-btn-nuovo" onclick="graziNuovo()"
       style="background:#4AB8B0;color:#fff;border:none;border-radius:8px;padding:13px 32px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:.02em;min-width:200px;">
@@ -2603,33 +2634,48 @@ function showGrazie(nome) {
   // intervallo attivo — lo salviamo globalmente per poterlo cancellare
   window._grazieIv = null;
 
-  if (isKiosk) {
-    // Kiosk: niente countdown, due bottoni
-    cntd.style.display = 'none';
-    if (actionsEl) { actionsEl.style.display = 'flex'; }
-    if (chiudiBtn) { chiudiBtn.style.display = 'block'; }
-  } else {
-    // Non-kiosk: countdown 30s poi tenta chiusura, altrimenti reset form
-    if (chiudiBtn) { chiudiBtn.style.display = 'block'; }
-    if (actionsEl) { actionsEl.style.display = 'flex'; }
+  var isSolo  = lsGet('solo_mode');
+
+  if (isSolo) {
+    // Solo (QR visitatori): countdown 25s poi schermata chiusura QR, no "Nuovo contatto"
+    var nuovoBtn = document.getElementById('grazie-btn-nuovo');
+    if (nuovoBtn) nuovoBtn.style.display = 'none';
+    if (chiudiBtn) chiudiBtn.style.display = 'none';
+    if (actionsEl) actionsEl.style.display = 'none';
     cntd.style.display = '';
-    var sec = 30;
-    cntd.innerHTML = "Chiusura automatica tra <strong>" + sec + "</strong>s…";
+    try { sessionStorage.setItem('bcad26_solo_done', '1'); } catch(e) {}
+    var sec = 25;
+    cntd.innerHTML = "Chiusura tra <strong>" + sec + "</strong>s…";
     window._grazieIv = setInterval(function() {
       sec--;
       if (sec <= 0) {
         clearInterval(window._grazieIv);
         window._grazieIv = null;
-        window.close();
-        setTimeout(function() {
-          if (!window.closed) {
-            ov.classList.remove("show");
-            if (actionsEl) actionsEl.style.display = 'none';
-            resetForm();
-          }
-        }, 400);
+        chiudiSessioneQR();
       } else {
-        cntd.innerHTML = "Chiusura automatica tra <strong>" + sec + "</strong>s…";
+        cntd.innerHTML = "Chiusura tra <strong>" + sec + "</strong>s…";
+      }
+    }, 1000);
+  } else if (isKiosk) {
+    // Kiosk (tablet staff): niente countdown, due bottoni
+    cntd.style.display = 'none';
+    if (actionsEl) { actionsEl.style.display = 'flex'; }
+    if (chiudiBtn) { chiudiBtn.style.display = 'block'; }
+  } else {
+    // Non-kiosk: countdown 25s poi chiudiSessione
+    if (chiudiBtn) { chiudiBtn.style.display = 'block'; }
+    if (actionsEl) { actionsEl.style.display = 'flex'; }
+    cntd.style.display = '';
+    var sec = 25;
+    cntd.innerHTML = "Chiusura tra <strong>" + sec + "</strong>s…";
+    window._grazieIv = setInterval(function() {
+      sec--;
+      if (sec <= 0) {
+        clearInterval(window._grazieIv);
+        window._grazieIv = null;
+        chiudiSessione();
+      } else {
+        cntd.innerHTML = "Chiusura tra <strong>" + sec + "</strong>s…";
       }
     }, 1000);
   }
@@ -2645,16 +2691,70 @@ function graziNuovo() {
 }
 
 function grazieChiudi() {
-  var chiudiBtn = document.getElementById('grazie-btn-chiudi');
-  var chiudiMsg = document.getElementById('grazie-chiudi-msg');
-  window.close();
-  // Se window.close() non funziona (tab non aperta da script), mostra messaggio
-  setTimeout(function() {
-    if (!window.closed) {
-      if (chiudiBtn) chiudiBtn.style.display = 'none';
-      if (chiudiMsg) chiudiMsg.style.display = 'block';
-    }
-  }, 300);
+  chiudiSessione();
+}
+
+function chiudiSessione() {
+  if (window._grazieIv) { clearInterval(window._grazieIv); window._grazieIv = null; }
+  var el = document.getElementById('overlay-sessione-chiusa');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'overlay-sessione-chiusa';
+    el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#09203B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;';
+    el.innerHTML = '<div style="text-align:center">'
+      + '<div style="font-size:28px;font-weight:700;color:#4AB8B0;letter-spacing:.04em;">B-CAD 2026</div>'
+      + '<div style="font-size:13px;color:#8aa8c0;margin-top:4px;letter-spacing:.1em;text-transform:uppercase;">La Nuvola · Roma · 4–6 Settembre 2026</div>'
+      + '</div>'
+      + '<div style="font-size:22px;font-weight:700;color:#E6DABE;margin-top:8px;">Sessione terminata</div>'
+      + '<div style="font-size:14px;color:#8aa8c0;">Grazie per la visita.</div>'
+
+    document.body.appendChild(el);
+  }
+  el.style.display = 'flex';
+}
+
+function chiudiSessioneQR() {
+  if (window._grazieIv) { clearInterval(window._grazieIv); window._grazieIv = null; }
+  var el = document.getElementById('overlay-sessione-chiusa-qr');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'overlay-sessione-chiusa-qr';
+    el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#09203B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center;';
+    el.innerHTML = '<div style="font-size:28px;font-weight:700;color:#4AB8B0;letter-spacing:.04em;">B-CAD 2026</div>'
+      + '<div style="font-size:13px;color:#8aa8c0;margin-top:4px;letter-spacing:.1em;text-transform:uppercase;">La Nuvola · Roma · 4–6 Settembre 2026</div>'
+      + '<div style="margin-top:16px;font-size:22px;font-weight:700;color:#E6DABE;">Registrazione completata</div>'
+      + '<div style="font-size:15px;color:#8aa8c0;line-height:1.6;">Riceverai una email di conferma<br>con il riepilogo della tua visita.</div>'
+      + '<div style="font-size:16px;font-weight:600;color:#4AB8B0;margin-top:8px;">Grazie per la tua visita a B-CAD 2026!</div>'
+      + '<div style="font-size:14px;color:#8aa8c0;">A presto.</div>';
+    document.body.appendChild(el);
+  }
+  el.style.display = 'flex';
+}
+
+function generaLinkQR() {
+  var cfg = {
+    v: 1,
+    mode: 'kiosk',
+    solo: true,
+    gas_url:    lsGet('gas_url')        || '',
+    admin_pin:  lsGet('admin_pin')      || '',
+    evento:     lsGet('config/evento')  || {},
+    privacy:    lsGet('config/privacy') || {},
+    espositori: (function(){
+      var d = lsGet('config/espositori');
+      if (!d || !d.lista) return null;
+      return { lista: d.lista.map(function(e){
+        return { id:e.id, nome:e.nome, visibile:e.visibile, colore:e.colore, custom:!!e.custom };
+      })};
+    })()
+  };
+  var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
+  var url  = getAppBaseUrl() + '#cfg=' + b64;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function(){
+      showToast('📲 Link QR visitatori copiato — associalo al QR code');
+    }).catch(function(){ prompt('Copia questo link QR:', url); });
+  } else { prompt('Copia questo link QR:', url); }
 }
 
 function resetForm() {
@@ -2966,6 +3066,8 @@ async function loadSettings() {
   const pinInput = document.getElementById('s-gas-pin');
   if (gasInput) gasInput.value = savedUrl;
   if (pinInput) pinInput.value = savedPin;
+  var pubUrlInput = document.getElementById('s-app-public-url');
+  if (pubUrlInput) pubUrlInput.value = lsGet('app_public_url') || '';
   updateBackendStatus(savedUrl);
 
   // Render defaults immediately
@@ -3925,7 +4027,10 @@ function updateBackendStatus(url) {
 function saveBackendSettings() {
   const url = (document.getElementById('s-gas-url').value || '').trim();
   const pin = (document.getElementById('s-gas-pin').value || '').trim();
+  const pubUrlEl = document.getElementById('s-app-public-url');
+  const pubUrl = (pubUrlEl ? pubUrlEl.value || '' : '').trim().replace(/[/]+$/, '');
   lsSet('gas_url', url);
+  lsSet('app_public_url', pubUrl);
   if (pin) lsSet('admin_pin', pin);
   updateBackendStatus(url);
   // Aggiorna il warning globale
@@ -3934,6 +4039,12 @@ function saveBackendSettings() {
   // Riavvia stats listener con nuovo URL
   if (url) startStatsListener();
   showToast(url ? '✓ Backend salvato' : 'Backend rimosso', url ? 'success' : 'error');
+}
+
+function getAppBaseUrl() {
+  var stored = lsGet('app_public_url') || '';
+  if (stored) return stored.replace(/[/]+$/, '') + '/';
+  return location.href.split('#')[0];
 }
 
 function generaLinkConfig() {
@@ -3953,7 +4064,7 @@ function generaLinkConfig() {
     })()
   };
   var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
-  var url  = location.href.split('#')[0] + '#cfg=' + b64;
+  var url  = getAppBaseUrl() + '#cfg=' + b64;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(url).then(function(){
       showToast('📋 Link configurato copiato — incollalo sul tablet o condividilo');
@@ -3997,6 +4108,7 @@ async function testBackendConnection() {
     if (cfg.espositori) lsSet('config/espositori', cfg.espositori);
     history.replaceState(null, '', location.pathname + location.search);
     if (cfg.mode === 'kiosk') lsSet('kiosk_mode', true);
+    lsSet('solo_mode', cfg.solo === true);
     console.log('[bcad] config applicata da URL, mode:', cfg.mode || 'full');
   } catch(e) { console.warn('[bcad] URL config error', e); }
 })();
@@ -4012,8 +4124,19 @@ async function testBackendConnection() {
       if (warn) warn.style.display = 'none';
       document.title = 'B-CAD 2026 — Form pubblico';
     }
+    // Solo mode: se il visitatore torna indietro dopo aver già compilato, mostra chiusura
+    if (lsGet('solo_mode')) {
+      try {
+        if (sessionStorage.getItem('bcad26_solo_done')) {
+          chiudiSessioneQR();
+          return;
+        }
+      } catch(e) {}
+    }
     applyStoredConfig();
-    startStatsListener();
+    // Stats bar: nascosta in modalità kiosk e solo (link configurati staff/visitatori)
+    if (!lsGet('kiosk_mode')) startStatsListener();
+    else document.getElementById('stats-bar').classList.add('empty');
     renderReportBrandList();
     seqCheck(); // blocca campi successivi al caricamento
     // Warm-up GAS: chiamata silenziosa per svegliare il backend prima del primo visitatore
