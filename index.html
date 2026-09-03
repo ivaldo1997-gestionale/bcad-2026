@@ -2844,7 +2844,20 @@ function generaLinkQR() {
   };
   var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
   var url  = getAppBaseUrl() + '#cfg=' + b64;
-  mostraLinkModal(url, '&#128242; Link QR Visitatori', 'Condividi o copia il link da associare al QR code.');
+  // Copia automatica negli appunti
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).then(function() {
+      showToast('\uD83D\uDCCB Link QR copiato negli appunti!', 'ok');
+    }).catch(function() { _copyFallback(url); });
+  } else { _copyFallback(url); }
+}
+function _copyFallback(url) {
+  var ta = document.createElement('textarea');
+  ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); showToast('\uD83D\uDCCB Link copiato negli appunti!', 'ok'); }
+  catch(e) { showToast('Copia manuale: ' + url, 'warn'); }
+  document.body.removeChild(ta);
 }
 
 function resetForm() {
@@ -4155,7 +4168,12 @@ function generaLinkConfig() {
   };
   var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
   var url  = getAppBaseUrl() + '#cfg=' + b64;
-  mostraLinkModal(url, '&#128203; Link Staff / Kiosk', 'Condividi o copia il link configurato per il tablet o smartphone dello staff.');
+  // Copia automatica negli appunti
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).then(function() {
+      showToast('\uD83D\uDCCB Link Kiosk copiato negli appunti!', 'ok');
+    }).catch(function() { _copyFallback(url); });
+  } else { _copyFallback(url); }
 }
 
 async function testBackendConnection() {
