@@ -2567,7 +2567,7 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
       _errOv.innerHTML = '<div style="font-size:2.5rem">⚠️</div>'
         + '<div style="color:#E6DABE;font-size:1.2rem;font-weight:700;">Errore salvataggio</div>'
         + '<div style="color:#8aa8c0;font-size:.95rem;max-width:400px;word-break:break-word;">' + (err.message || err.code || 'Errore sconosciuto') + '</div>'
-        + '<div style="color:#8aa8c0;font-size:.85rem;">Controlla connessione e riprova.<br>Se il problema persiste, contatta l'organizzazione.</div>'
+        + '<div style="color:#8aa8c0;font-size:.85rem;">Controlla connessione e riprova.<br>Se il problema persiste, contatta l\'organizzazione.</div>'
         + '<button onclick="this.parentElement.remove();" style="margin-top:8px;padding:10px 28px;background:#4AB8B0;color:#fff;border:none;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:700;">Chiudi</button>';
       document.body.appendChild(_errOv);
     }
@@ -2782,6 +2782,49 @@ function chiudiSessioneQR() {
   el.style.display = 'flex';
 }
 
+function mostraLinkModal(url, titolo, desc) {
+  var id = 'link-modal-overlay';
+  var el = document.getElementById(id);
+  if (el) el.remove();
+  var ov = document.createElement('div');
+  ov.id = id;
+  ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(9,32,59,.72);display:flex;align-items:center;justify-content:center;padding:16px;';
+  var wa = 'https://wa.me/?text=' + encodeURIComponent(url);
+  var ml = 'mailto:?subject=' + encodeURIComponent(titolo) + '&body=' + encodeURIComponent(url);
+  var aHref = '<a href="' + url + '" target="_blank" rel="noopener" style="display:block;word-break:break-all;font-size:.82rem;color:#09203B;background:#f0f4f8;border:1.5px solid #4AB8B0;border-radius:8px;padding:10px 12px;text-decoration:none;margin-bottom:16px;">' + url + '</a>';
+  var waA = '<a href="' + wa + '" target="_blank" rel="noopener" style="flex:1;min-width:120px;padding:10px;border-radius:8px;background:#25D366;color:#fff;font-weight:700;text-decoration:none;text-align:center;font-size:.9rem;display:flex;align-items:center;justify-content:center;">&#128172; WhatsApp</a>';
+  var mlA = '<a href="' + ml + '" style="flex:1;min-width:120px;padding:10px;border-radius:8px;background:#09203B;color:#E6DABE;font-weight:700;text-decoration:none;text-align:center;font-size:.9rem;display:flex;align-items:center;justify-content:center;">&#9993; Email</a>';
+  ov.innerHTML = '<div style="background:#fff;border-radius:14px;max-width:540px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.35);overflow:hidden;">'
+    + '<div style="background:#09203B;color:#E6DABE;padding:16px 20px;font-family:Caladea,serif;font-size:1.15rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;"><span>' + titolo + '</span><button id="lm-close" style="background:none;border:none;color:#E6DABE;font-size:1.5rem;cursor:pointer;line-height:1;">&times;</button></div>'
+    + '<div style="padding:20px 20px 8px;">'
+    + '<p style="margin:0 0 12px;font-size:.9rem;color:#555;">' + desc + '</p>'
+    + aHref
+    + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">'
+    + '<button id="lm-copy" style="flex:1;min-width:120px;padding:10px;border-radius:8px;border:none;background:#4AB8B0;color:#fff;font-weight:700;cursor:pointer;font-size:.9rem;">&#128203; Copia link</button>'
+    + waA + mlA
+    + '</div></div></div>';
+  document.body.appendChild(ov);
+  ov.addEventListener('click', function(e){ if(e.target===ov) ov.remove(); });
+  document.getElementById('lm-close').addEventListener('click', function(){ ov.remove(); });
+  document.getElementById('lm-copy').addEventListener('click', function(){
+    var btn = this;
+    function done(ok) {
+      btn.textContent = ok ? 'Copiato!' : 'Copia manualmente';
+      setTimeout(function(){ btn.innerHTML = '&#128203; Copia link'; }, 2200);
+    }
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function(){ done(true); }).catch(function(){ fallback(); });
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = url; ta.style.cssText = 'position:fixed;opacity:0;';
+      document.body.appendChild(ta); ta.select();
+      try { done(document.execCommand('copy')); } catch(x){ done(false); }
+      document.body.removeChild(ta);
+    }
+  });
+}
+
 function generaLinkQR() {
   var cfg = {
     v: 1,
@@ -2801,11 +2844,7 @@ function generaLinkQR() {
   };
   var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
   var url  = getAppBaseUrl() + '#cfg=' + b64;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(function(){
-      showToast('📲 Link QR visitatori copiato — associalo al QR code');
-    }).catch(function(){ prompt('Copia questo link QR:', url); });
-  } else { prompt('Copia questo link QR:', url); }
+  mostraLinkModal(url, '&#128242; Link QR Visitatori', 'Condividi o copia il link da associare al QR code.');
 }
 
 function resetForm() {
@@ -2994,7 +3033,7 @@ function fmtDate(ts) {
 
 // ── CSV export ─────────────────────────────────────────────────────
 function buildCsv(rows) {
-  const headers = ['Data','Ora','Nome','Cognome','Azienda','Titolo','Ruolo','Email','Telefono','CAP','Espositori','Note','Privacy'];
+  const headers = ['Data','Ora','Nome','Cognome','Titolo','Azienda','Ruolo','Email','Telefono','CAP','Espositori','Note','Privacy'];
   const lines = [headers.join(';')];
   rows.forEach(c => {
     const d = c.ts ? new Date(c.ts) : null;
@@ -3003,8 +3042,8 @@ function buildCsv(rows) {
       d ? d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}) : '',
       c.nome||'',
       c.cognome||'',
-      c.azienda||'',
       c.titolo||'',
+      c.azienda||'',
       c.ruolo||'',
       c.email||'',
       c.telefono||'',
@@ -4116,11 +4155,7 @@ function generaLinkConfig() {
   };
   var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg))));
   var url  = getAppBaseUrl() + '#cfg=' + b64;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(function(){
-      showToast('📋 Link configurato copiato — incollalo sul tablet o condividilo');
-    }).catch(function(){ prompt('Copia questo link:', url); });
-  } else { prompt('Copia questo link:', url); }
+  mostraLinkModal(url, '&#128203; Link Staff / Kiosk', 'Condividi o copia il link configurato per il tablet o smartphone dello staff.');
 }
 
 async function testBackendConnection() {
